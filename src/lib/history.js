@@ -29,6 +29,17 @@ function cellText(row, selector) {
   return cell ? cell.textContent.replace(/\s+/g, " ").trim() : "";
 }
 
+// The type cell also contains the payment method ("Purchase Klarna",
+// "Purchase 8,18€ Wallet 61,81€ Klarna"). We remove the payment part, so a
+// payment method like "Geschenkkarte" can't be mistaken for a gift.
+function readType(row) {
+  const cell = row.querySelector(".wht_type");
+  if (!cell) return "";
+  const copy = cell.cloneNode(true);
+  copy.querySelectorAll("[class*='payment']").forEach((node) => node.remove());
+  return copy.textContent.replace(/\s+/g, " ").trim();
+}
+
 function classify(typeText, items) {
   const lowerType = typeText.toLowerCase();
   let type = "other";
@@ -45,8 +56,7 @@ function classify(typeText, items) {
   return type;
 }
 
-// Reads item names. The payment method also sits in this cell
-// (class wth_payment), so we skip it.
+// Reads item names, one div per item.
 function readItems(row) {
   const cell = row.querySelector(".wht_items");
   if (!cell) return [];
@@ -64,7 +74,7 @@ VL.parseHistoryRows = function (root) {
   const transactions = [];
   for (const row of root.querySelectorAll("tr.wallet_table_row")) {
     const dateText = cellText(row, ".wht_date");
-    const typeText = cellText(row, ".wht_type");
+    const typeText = readType(row);
     const totalText = cellText(row, ".wht_total");
     const walletText = cellText(row, ".wht_wallet_change");
     const items = readItems(row);

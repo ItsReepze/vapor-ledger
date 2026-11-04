@@ -40,7 +40,14 @@ VL.buildStats = function (games, transactions) {
   const paid = new Map(); // appid -> amount
   const refunded = new Map(); // appid -> amount
 
+  // Labels of entries we could not recognize, with how often they appear.
+  const unknownTypes = {};
+
   for (const t of transactions) {
+    if (t.type === "other") {
+      const label = t.typeText || "(empty)";
+      unknownTypes[label] = (unknownTypes[label] || 0) + 1;
+    }
     if (t.type === "market") {
       marketNet += t.walletChange || 0;
       byType.market += t.amount;
@@ -107,6 +114,7 @@ VL.buildStats = function (games, transactions) {
     byYear,
     marketNet,
     multiItemPurchases,
+    unknownTypes,
     transactionCount: transactions.length,
     games: rows,
     gameCount: rows.length,

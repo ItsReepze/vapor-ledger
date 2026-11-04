@@ -123,7 +123,8 @@ function renderStats(content, stats) {
       listRow("In-game purchases", money(stats.byType.ingame)),
       listRow("Refunds", "- " + money(stats.byType.refund)),
       listRow("Wallet top-ups (not counted)", money(stats.byType.wallet), true),
-      listRow("Market, net wallet change (not counted)", money(stats.marketNet), true)
+      listRow("Market, net wallet change (not counted)", money(stats.marketNet), true),
+      listRow("Other entries (not counted)", money(stats.byType.other), true)
     )
   );
 
@@ -241,6 +242,10 @@ function renderNotes(stats) {
           + (stats.multiItemPurchases === 1 ? " purchase had" : " purchases had")
           + " several items in one cart. Steam only shows the total for those, "
           + "so they count for the total but not for single games.")
+        : null,
+      Object.keys(stats.unknownTypes).length > 0
+        ? el("li", {}, "Not recognized (counted as other): " + Object.entries(stats.unknownTypes)
+          .map(([label, count]) => label + " (" + count + ")").join(", "))
         : null,
       el("li", {}, "Games from keys, bundles or gifts have no price on Steam and show \"-\"."),
       el("li", {}, "All data stays in your browser. Vapor Ledger only talks to Steam.")
