@@ -1,0 +1,53 @@
+{
+  "manifest_version": 3,
+  "name": "Vapor Ledger for Steam",
+  "short_name": "Vapor Ledger",
+  "version": "0.1.0",
+  "description": "Free, ad-free stats for your Steam account: spending, playtime, cost per hour and your pile of shame. All data stays in your browser.",
+  "permissions": ["storage"],
+  "host_permissions": [
+    "https://store.steampowered.com/*",
+    "https://api.steampowered.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://store.steampowered.com/*"],
+      "js": [
+        "src/lib/util.js",
+        "src/lib/history.js",
+        "src/lib/steam.js",
+        "src/lib/stats.js",
+        "src/lib/cache.js",
+        "src/content/styles.js",
+        "src/content/dashboard.js",
+        "src/content/main.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_title": "Vapor Ledger",
+    "default_popup": "src/popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "vapor-ledger@reepze.com",
+      "strict_min_version": "128.0",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
+    }
+  }
+}
