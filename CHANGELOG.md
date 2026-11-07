@@ -11,6 +11,7 @@
   for Steam, CS2, TF2, Dota 2, Rust and PUBG items, rate limited, prices
   cached for a day
 - Market history with profit and loss per item and in total
+- "What Steam really cost you" tile on the store dashboard
 
 ## 0.1.0 (2026-11-04)
 

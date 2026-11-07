@@ -92,7 +92,10 @@ VL.openDashboard = async function (mode) {
         }
       }
       updated.textContent = "Data from " + new Date(data.fetchedAt).toLocaleString();
-      renderStats(content, VL.buildStats(data.games, data.transactions, data.store || null));
+      const stats = VL.buildStats(data.games, data.transactions, data.store || null);
+      const community = await VL.loadCache("community-" + session.steamid);
+      stats.balance = VL.buildBalance(stats, community);
+      renderStats(content, stats);
     } catch (error) {
       console.error("[Vapor Ledger]", error);
       showStatus("Something went wrong: " + error.message, true);
@@ -156,6 +159,10 @@ function renderStats(content, stats) {
       stats.hasStorePrices
         ? tile("Store value today", storeMoney(stats.storeValue),
           stats.storePricedCount + " games still for sale, pile: " + storeMoney(stats.pileStoreValue))
+        : null,
+      stats.balance
+        ? tile("What Steam really cost you", money(stats.balance.netCost),
+          "spent, minus market result and items (after fees)")
         : null
     )
   );

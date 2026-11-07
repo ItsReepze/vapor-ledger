@@ -6,7 +6,7 @@ const path = require("node:path");
 const vm = require("node:vm");
 const { parseHTML } = require("linkedom");
 
-for (const file of ["src/lib/util.js", "src/lib/history.js", "src/lib/community.js", "src/lib/market.js"]) {
+for (const file of ["src/lib/util.js", "src/lib/history.js", "src/lib/community.js", "src/lib/market.js", "src/lib/stats.js"]) {
   vm.runInThisContext(fs.readFileSync(path.join(__dirname, "..", file), "utf8"));
 }
 const VL = globalThis.VL;
@@ -195,4 +195,16 @@ test("parseHistoryRows reads the purchase history table", () => {
   assert.deepStrictEqual(t.items, ["Hades"]);
   assert.strictEqual(t.amount, 24.99);
   assert.strictEqual(t.date, Date.UTC(2026, 10, 4));
+});
+
+test("buildBalance combines store, market and inventory", () => {
+  const community = {
+    stacks: [{ appid: 730, hashName: "Key", name: "Key", marketable: true, count: 2 }],
+    prices: { "730/Key": { cents: 115, text: "1,15€", at: 0 } },
+    history: [{ id: "a", action: "sold", name: "X", game: "G", amount: 3.5, currency: "€", dateText: "" }],
+  };
+  const balance = VL.buildBalance({ spent: 100, currency: "€" }, community);
+  assert.deepStrictEqual(balance, { inventoryReceive: 2, marketNet: 3.5, netCost: 94.5 });
+  assert.strictEqual(VL.buildBalance({ spent: 100, currency: "€" }, null), null);
+  assert.strictEqual(VL.buildBalance({ spent: 100, currency: "$" }, community), null);
 });

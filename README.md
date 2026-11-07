@@ -25,6 +25,8 @@ browser and the only site the extension talks to is Steam itself.
 - **Inventory value** for Steam items, Counter-Strike 2, Team Fortress 2,
   Dota 2, Rust and PUBG: market price and what you would get after fees
 - **Market history with profit and loss** per item and in total
+- **What Steam really cost you**: store spending minus market result minus
+  what your items would bring, once the community page was opened
 - Local cache, so the dashboard opens instantly next time
 
 Nothing is ever sold, listed or traded automatically.
@@ -32,8 +34,6 @@ Nothing is ever sold, listed or traded automatically.
 ## Planned
 
 - Quick sell for single items, with a confirmation for every item
-- Account balance: spent in the store, market result and inventory value in one
-  number
 - Trade offer value comparison
 - Export of all data as CSV
 

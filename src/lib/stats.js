@@ -142,3 +142,21 @@ VL.buildStats = function (games, transactions, store) {
     costPerHour: totalMinutes >= 60 ? spent / (totalMinutes / 60) : null,
   };
 };
+
+// Combines the store stats with the inventory and market data saved on
+// steamcommunity.com. Returns null if there is no community data yet or
+// the currencies don't match.
+VL.buildBalance = function (stats, community) {
+  if (!community || !community.stacks || !VL.buildInventoryStats) return null;
+  const inventory = VL.buildInventoryStats(community.stacks, community.prices || {});
+  const market = VL.buildMarketStats(community.history || []);
+  for (const currency of [inventory.currency, market.currency]) {
+    if (currency && stats.currency && currency !== stats.currency) return null;
+  }
+  const cents = (v) => Math.round(v * 100);
+  return {
+    inventoryReceive: inventory.receive,
+    marketNet: market.net,
+    netCost: (cents(stats.spent) - cents(market.net) - cents(inventory.receive)) / 100,
+  };
+};
