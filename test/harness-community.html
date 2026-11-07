@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Vapor Ledger community test page</title>
+  <style>body { background: #1b2838; color: #fff; font-family: Arial; }</style>
+</head>
+<body>
+  <!-- A fake Steam Community page with made up inventory, prices and market
+       history. Open it through a local web server, for example: npx serve .
+       Then open /test/harness-community.html -->
+  <div id="global_action_menu"></div>
+  <script>g_steamID = "76561190000000000";</script>
+  <script>var g_rgWalletInfo = {"wallet_currency":3,"wallet_country":"DE"};</script>
+  <p>Fake community page.</p>
+
+  <script>
+    const store = {};
+    window.chrome = { storage: { local: {
+      get: async (key) => ({ [key]: store[key] }),
+      set: async (obj) => Object.assign(store, obj),
+      remove: async (key) => { delete store[key]; },
+    } } };
+
+    const inventories = {
+      "753/6": [["Hades Trading Card", 1, 3], ["Portal Background", 1, 1], ["Gems", 0, 1]],
+      "730/2": [["Recoil Case", 1, 12], ["AK-47 | Slate (Field-Tested)", 1, 1], ["Service Medal", 0, 1]],
+    };
+    const prices = {
+      "Hades Trading Card": "0,08€", "Portal Background": "0,35€", "Recoil Case": "0,52€",
+      "AK-47 | Slate (Field-Tested)": "4,87€",
+    };
+    function inventory(key) {
+      const list = inventories[key];
+      if (!list) return null;
+      const assets = [];
+      const descriptions = list.map(([name, marketable, count], i) => {
+        for (let n = 0; n < count; n++) assets.push({ appid: Number(key.split("/")[0]), classid: String(i), instanceid: "0", amount: "1" });
+        return { classid: String(i), instanceid: "0", name, market_hash_name: name, marketable, type: "" };
+      });
+      return { success: 1, assets, descriptions, total_inventory_count: assets.length };
+    }
+    const row = (id, sign, price, name, game) => `
+      <div class="market_listing_row" id="${id}">
+        <div class="market_listing_gainorloss">${sign}</div>
+        <span class="market_listing_price">${price}</span>
+        <div class="market_listing_listed_date">4 Nov</div>
+        <span class="market_listing_item_name">${name}</span>
+        <span class="market_listing_game_name">${game}</span>
+      </div>`;
+    const history = row("h1", "-", "5,20€", "AK-47 | Slate (Field-Tested)", "Counter-Strike 2")
+      + row("h2", "+", "4,10€", "AK-47 | Slate (Field-Tested)", "Counter-Strike 2")
+      + row("h3", "", "6,00€", "Recoil Case", "Counter-Strike 2")
+      + row("h4", "+", "2,50€", "Operation Pass", "Counter-Strike 2")
+      + row("h5", "-", "0,09€", "Hades Trading Card", "Steam");
+
+    window.fetch = async (url) => {
+      const u = new URL(url);
+      await new Promise((r) => setTimeout(r, 50));
+      const inv = u.pathname.match(/^\/inventory\/\d+\/(\d+)\/(\d+)/);
+      if (inv) {
+        const data = inventory(inv[1] + "/" + inv[2]);
+        return data ? new Response(JSON.stringify(data)) : new Response("null", { status: 403 });
+      }
+      if (u.pathname === "/market/priceoverview/") {
+        const price = prices[u.searchParams.get("market_hash_name")];
+        return new Response(JSON.stringify(price ? { success: true, lowest_price: price } : { success: false }));
+      }
+      if (u.pathname === "/market/myhistory/render/") {
+        return new Response(JSON.stringify({ success: true, total_count: 5, results_html: history }));
+      }
+      return new Response("not found", { status: 404 });
+    };
+  </script>
+  <script src="../src/lib/util.js"></script>
+  <script src="../src/lib/community.js"></script>
+  <script src="../src/lib/market.js"></script>
+  <script src="../src/lib/cache.js"></script>
+  <script src="../src/content/styles.js"></script>
+  <script src="../src/content/market-view.js"></script>
+  <script src="../src/content/dashboard.js"></script>
+  <script>VL.openDashboard("community");</script>
+</body>
+</html>

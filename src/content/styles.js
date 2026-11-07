@@ -155,6 +155,13 @@ td.num, th.num { text-align: right; }
 tr.shame td:first-child { color: var(--bad); }
 
 .notes { color: var(--muted); font-size: 12px; }
+.notes a { color: var(--accent); }
+.notes li.error { color: var(--bad); }
+tr.muted-row td { color: var(--muted); }
+tr.gain td:last-child { color: var(--good); }
+tr.loss td:last-child { color: var(--bad); }
+.progress { color: var(--muted); margin: -12px 0 20px; min-height: 1em; }
+.progress button { margin-left: 8px; padding: 2px 10px; }
 .notes li { margin-bottom: 4px; }
 
 .status { padding: 60px 20px; text-align: center; color: var(--muted); }

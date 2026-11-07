@@ -7,8 +7,11 @@ globalThis.VL = VL;
 const el = VL.el;
 let host = null; // the element that holds the shadow root
 
-VL.openDashboard = async function () {
+// mode "store" shows the library, "community" inventory and market.
+// Without a mode it follows the site we are on.
+VL.openDashboard = async function (mode) {
   if (host) return;
+  mode = mode || (location.hostname === "steamcommunity.com" ? "community" : "store");
 
   host = document.createElement("div");
   host.id = "vapor-ledger";
@@ -37,6 +40,24 @@ VL.openDashboard = async function () {
   }
 
   async function load(force) {
+    if (mode === "community") {
+      refresh.disabled = true;
+      try {
+        await VL.loadCommunityView({
+          content,
+          showStatus,
+          force,
+          setUpdated: (text) => { updated.textContent = text; },
+        });
+      } catch (error) {
+        console.error("[Vapor Ledger]", error);
+        showStatus("Something went wrong: " + error.message, true);
+      } finally {
+        refresh.disabled = false;
+      }
+      return;
+    }
+
     const session = VL.getSession();
     if (!session) {
       showStatus("Please log in to Steam first, then open Vapor Ledger again.", true);
@@ -114,6 +135,9 @@ function listRow(label, value, muted) {
   );
 }
 
+VL.tile = tile;
+VL.listRow = listRow;
+
 function renderStats(content, stats) {
   const money = (v) => VL.formatMoney(v, stats.currency);
   const storeMoney = (v) => VL.formatMoney(v, stats.storeCurrency || stats.currency);
@@ -159,6 +183,12 @@ function renderStats(content, stats) {
     tiles,
     el("section", { class: "columns" }, breakdown, renderYears(stats, money)),
     renderTable(stats, money),
+    el("section", { class: "notes" },
+      el("h2", {}, "Inventory and market"),
+      el("p", {}, "Inventory value and market profit or loss live on Steam Community. ",
+        el("a", { href: "https://steamcommunity.com/my/inventory/#vapor-ledger" },
+          "Open them on steamcommunity.com"), ".")
+    ),
     renderNotes(stats)
   );
 }

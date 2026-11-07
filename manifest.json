@@ -3,7 +3,7 @@
   "name": "Vapor Ledger for Steam",
   "short_name": "Vapor Ledger",
   "version": "0.1.0",
-  "description": "Free, ad-free stats for your Steam account: spending, playtime, cost per hour and your pile of shame. All data stays in your browser.",
+  "description": "Free, ad-free stats for your Steam account: spending, playtime, pile of shame, inventory value and market profit. All data stays in your browser.",
   "permissions": ["storage"],
   "host_permissions": [
     "https://store.steampowered.com/*",
@@ -11,16 +11,19 @@
   ],
   "content_scripts": [
     {
-      "matches": ["https://store.steampowered.com/*"],
+      "matches": ["https://store.steampowered.com/*", "https://steamcommunity.com/*"],
       "js": [
         "src/lib/util.js",
         "src/lib/history.js",
         "src/lib/steam.js",
         "src/lib/prices.js",
+        "src/lib/community.js",
+        "src/lib/market.js",
         "src/lib/stats.js",
         "src/lib/cache.js",
         "src/content/styles.js",
         "src/content/share.js",
+        "src/content/market-view.js",
         "src/content/dashboard.js",
         "src/content/main.js"
       ],
