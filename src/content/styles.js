@@ -86,6 +86,8 @@ h2 {
   margin: 0 0 10px;
 }
 
+.actions { display: flex; justify-content: flex-end; margin: -6px 0 12px; }
+
 .tiles {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));

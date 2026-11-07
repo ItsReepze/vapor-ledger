@@ -149,7 +149,13 @@ function renderStats(content, stats) {
     )
   );
 
+  const actions = el("div", { class: "actions" },
+    el("button", { onclick: () => VL.saveSummaryImage(stats),
+      title: "Saves a PNG with your totals. No Steam ID, no game list." }, "Save summary image")
+  );
+
   content.replaceChildren(
+    actions,
     tiles,
     el("section", { class: "columns" }, breakdown, renderYears(stats, money)),
     renderTable(stats, money),

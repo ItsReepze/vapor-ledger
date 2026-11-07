@@ -20,6 +20,7 @@
         "src/lib/stats.js",
         "src/lib/cache.js",
         "src/content/styles.js",
+        "src/content/share.js",
         "src/content/dashboard.js",
         "src/content/main.js"
       ],

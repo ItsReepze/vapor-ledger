@@ -19,6 +19,8 @@ browser and the only site the extension talks to is Steam itself.
 - **Store value today**: what your library would cost in the store right now,
   with today's discounts
 - Sortable and searchable games table
+- **Summary image**: save your totals as a PNG to share. It is made in your
+  browser and shows no Steam ID, name or game list
 - Local cache, so the dashboard opens instantly next time
 
 ## Planned
@@ -27,7 +29,6 @@ browser and the only site the extension talks to is Steam itself.
 - Market history with profit and loss
 - Quick sell and bulk sell
 - Trade offer value comparison
-- Shareable summary image
 
 ## Install (for now)
 

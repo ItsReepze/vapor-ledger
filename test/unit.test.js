@@ -7,7 +7,7 @@ const vm = require("node:vm");
 
 // The extension files expect a browser-like global scope, so we load them
 // into this context instead of using require().
-for (const file of ["src/lib/util.js", "src/lib/stats.js", "src/lib/prices.js"]) {
+for (const file of ["src/lib/util.js", "src/lib/stats.js", "src/lib/prices.js", "src/content/share.js"]) {
   vm.runInThisContext(fs.readFileSync(path.join(__dirname, "..", file), "utf8"));
 }
 const VL = globalThis.VL;
@@ -123,4 +123,24 @@ test("buildStats adds store value and cost per hour", () => {
   const without = VL.buildStats(games, transactions);
   assert.strictEqual(without.hasStorePrices, false);
   assert.strictEqual(without.storeValue, 0);
+});
+
+test("summaryFigures shows totals only, never names or ids", () => {
+  const games = [
+    { appid: 1, name: "Hades", minutes: 600, lastPlayed: null },
+    { appid: 2, name: "Portal 2", minutes: 0, lastPlayed: null },
+  ];
+  const transactions = [
+    { date: Date.UTC(2025, 0, 1), type: "purchase", items: ["Hades"], amount: 20, currency: "€", walletChange: null },
+  ];
+  const figures = VL.summaryFigures(VL.buildStats(games, transactions));
+  assert.strictEqual(figures.length, 6);
+  assert.deepStrictEqual(figures.map((f) => f[0]), [
+    "Spent on Steam", "Played", "Games", "Pile of shame", "Per hour played", "Never started",
+  ]);
+  const text = JSON.stringify(figures);
+  assert.doesNotMatch(text, /Hades|Portal/);
+
+  const withStore = VL.summaryFigures(VL.buildStats(games, transactions, { currency: "€", prices: {} }));
+  assert.strictEqual(withStore[5][0], "Store value today");
 });
