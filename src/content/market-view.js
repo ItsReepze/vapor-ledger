@@ -6,6 +6,9 @@ globalThis.VL = VL;
 
 // A small sortable, searchable table.
 // columns: [{ key, label, num, show(row) }]
+// Returns the table element. Its setRows(rows) swaps the data and keeps
+// search text, sorting and focus, so the table can update while prices
+// are still loading.
 VL.dataTable = function (columns, rows, options) {
   const el = VL.el;
   const state = { sort: options.sort, desc: options.desc !== false, search: "" };
@@ -47,10 +50,15 @@ VL.dataTable = function (columns, rows, options) {
   }
 
   draw();
-  return el("div", {},
+  const node = el("div", {},
     el("div", { class: "filters" }, search),
     el("div", { class: "table-wrap" }, el("table", {}, el("thead", {}, headRow), tbody))
   );
+  node.setRows = (newRows) => {
+    rows = newRows;
+    draw();
+  };
+  return node;
 };
 
 function gameLabel(appid) {
@@ -94,15 +102,13 @@ VL.loadCommunityView = async function (view) {
   }
   view.setUpdated("Data from " + new Date(data.fetchedAt).toLocaleString());
 
-  // Prices load in the background. The view is drawn first and updated
-  // every few prices, and the user can stop at any time.
+  // Prices load in the background. The view is built once and only its
+  // numbers and table rows are updated, so a search the user typed in
+  // stays while prices come in. The user can stop at any time.
   let stopped = false;
   const progress = el("div", { class: "progress" });
-
-  function render() {
-    view.content.replaceChildren(renderCommunity(data, progress, notes));
-  }
-  render();
+  const page = VL.buildCommunityPage(data, progress, notes);
+  view.content.replaceChildren(page);
 
   const todo = data.stacks.filter((s) => {
     const p = data.prices[s.appid + "/" + s.hashName];
@@ -119,34 +125,28 @@ VL.loadCommunityView = async function (view) {
           + (done < total ? " (about " + minutes + " min left) " : " "),
         done < total ? stop : ""
       );
-      if (done % 10 === 0 || done === total) render();
+      if (done % 10 === 0 || done === total) page.update();
     }, () => !stopped);
   } catch (error) {
     notes.push(error.message);
   }
   progress.replaceChildren();
   await VL.saveCache(cacheId, data);
-  render();
+  page.update();
 };
 
-function renderCommunity(data, progress, notes) {
+// Builds the community page once. page.update() recalculates the numbers
+// from `data` and refreshes tiles, tables and notes in place.
+VL.buildCommunityPage = function (data, progress, notes) {
   const el = VL.el;
-  const inv = VL.buildInventoryStats(data.stacks, data.prices);
-  const market = VL.buildMarketStats(data.history);
-  const money = (v) => VL.formatMoney(v, inv.currency || market.currency);
-  const marketMoney = (v) => VL.formatMoney(v, market.currency || inv.currency);
+  // The currency is only known once the first price arrived, so the
+  // formatters read it from here instead of capturing it once.
+  const current = { inv: null, market: null };
+  const money = (v) => VL.formatMoney(v, current.inv.currency || current.market.currency);
+  const marketMoney = (v) => VL.formatMoney(v, current.market.currency || current.inv.currency);
 
-  const tiles = el("section", {},
-    el("div", { class: "tiles" },
-      VL.tile("Inventory value", money(inv.value), "lowest market listing"),
-      VL.tile("You would get", money(inv.receive), "after Steam fees"),
-      VL.tile("Items", inv.itemCount.toLocaleString(),
-        inv.marketableCount + " marketable, " + inv.pricedCount + " priced"),
-      VL.tile("Market bought", marketMoney(market.bought), market.boughtCount + " purchases"),
-      VL.tile("Market sold", marketMoney(market.sold), market.soldCount + " sales"),
-      VL.tile("Market profit or loss", marketMoney(market.net), "sold minus bought, unsold items count as cost")
-    )
-  );
+  const tiles = el("section");
+  const notesList = el("ul");
 
   const inventoryTable = VL.dataTable([
     { key: "name", label: "Item" },
@@ -154,7 +154,7 @@ function renderCommunity(data, progress, notes) {
     { key: "count", label: "Count", num: true },
     { key: "price", label: "Price", num: true, show: (r) => (r.price === null ? "-" : money(r.price)) },
     { key: "total", label: "Total", num: true, show: (r) => (r.total === null ? "-" : money(r.total)) },
-  ], inv.rows, {
+  ], [], {
     sort: "total",
     placeholder: "Search items",
     searchText: (r) => r.name + " " + gameLabel(r.appid),
@@ -169,34 +169,61 @@ function renderCommunity(data, progress, notes) {
     { key: "sold", label: "Sold", num: true,
       show: (r) => (r.soldCount ? r.soldCount + " x, " + marketMoney(r.sold) : "-") },
     { key: "net", label: "Net", num: true, show: (r) => marketMoney(r.net) },
-  ], market.rows, {
+  ], [], {
     sort: "net",
     placeholder: "Search market history",
     searchText: (r) => r.name + " " + r.game,
     rowClass: (r) => (r.net < 0 ? "loss" : r.net > 0 ? "gain" : ""),
   });
 
-  return el("div", {},
+  const inventoryEmpty = el("div", { class: "list" }, "No items found.");
+  const marketEmpty = el("div", { class: "list" }, "No market purchases or sales found.");
+
+  function update() {
+    const inv = VL.buildInventoryStats(data.stacks, data.prices);
+    const market = VL.buildMarketStats(data.history);
+    current.inv = inv;
+    current.market = market;
+
+    tiles.replaceChildren(el("div", { class: "tiles" },
+      VL.tile("Inventory value", money(inv.value), "lowest market listing"),
+      VL.tile("You would get", money(inv.receive), "after Steam fees"),
+      VL.tile("Items", inv.itemCount.toLocaleString(),
+        inv.marketableCount + " marketable, " + inv.pricedCount + " priced"),
+      VL.tile("Market bought", marketMoney(market.bought), market.boughtCount + " purchases"),
+      VL.tile("Market sold", marketMoney(market.sold), market.soldCount + " sales"),
+      VL.tile("Market profit or loss", marketMoney(market.net), "sold minus bought, unsold items count as cost")
+    ));
+
+    inventoryTable.setRows(inv.rows);
+    marketTable.setRows(market.rows);
+    inventoryTable.hidden = inv.rows.length === 0;
+    inventoryEmpty.hidden = inv.rows.length > 0;
+    marketTable.hidden = market.rows.length === 0;
+    marketEmpty.hidden = market.rows.length > 0;
+
+    notesList.replaceChildren(
+      ...notes.map((n) => el("li", { class: "error" }, n)),
+      el("li", {}, "Inventories read: " + VL.INVENTORY_APPS.map((a) => a[2]).join(", ") + "."),
+      el("li", {}, "Prices are the lowest current listing on the Steam market and are kept "
+        + "for one day. Steam allows about 20 price requests per minute, so a big "
+        + "inventory takes a while the first time."),
+      el("li", {}, "\"You would get\" subtracts the Steam and game fees from each price."),
+      el("li", {}, "Market profit or loss uses the prices exactly as your market history "
+        + "shows them." + (data.historyComplete ? "" : " The history is not complete yet, "
+        + "click Refresh to load the rest.")),
+      el("li", {}, "Nothing is sold or listed automatically. All data stays in your browser.")
+    );
+  }
+
+  const page = el("div", {},
     tiles,
     progress,
-    el("section", {}, el("h2", {}, "Inventory"),
-      inv.rows.length ? inventoryTable : el("div", { class: "list" }, "No items found.")),
-    el("section", {}, el("h2", {}, "Market history"),
-      market.rows.length ? marketTable : el("div", { class: "list" }, "No market purchases or sales found.")),
-    el("section", { class: "notes" },
-      el("h2", {}, "Good to know"),
-      el("ul", {},
-        notes.map((n) => el("li", { class: "error" }, n)),
-        el("li", {}, "Inventories read: " + VL.INVENTORY_APPS.map((a) => a[2]).join(", ") + "."),
-        el("li", {}, "Prices are the lowest current listing on the Steam market and are kept "
-          + "for one day. Steam allows about 20 price requests per minute, so a big "
-          + "inventory takes a while the first time."),
-        el("li", {}, "\"You would get\" subtracts the Steam and game fees from each price."),
-        el("li", {}, "Market profit or loss uses the prices exactly as your market history "
-          + "shows them." + (data.historyComplete ? "" : " The history is not complete yet, "
-          + "click Refresh to load the rest.")),
-        el("li", {}, "Nothing is sold or listed automatically. All data stays in your browser.")
-      )
-    )
+    el("section", {}, el("h2", {}, "Inventory"), inventoryTable, inventoryEmpty),
+    el("section", {}, el("h2", {}, "Market history"), marketTable, marketEmpty),
+    el("section", { class: "notes" }, el("h2", {}, "Good to know"), notesList)
   );
-}
+  page.update = update;
+  update();
+  return page;
+};
