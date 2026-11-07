@@ -65,7 +65,7 @@ function readCursor(doc) {
     if (match) {
       try {
         return JSON.parse(match[1]);
-      } catch (error) {
+      } catch {
         return null;
       }
     }

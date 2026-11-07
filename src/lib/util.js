@@ -13,7 +13,8 @@ VL.sleep = function (ms) {
 // into a number. Returns null if there is no number in the text.
 VL.parseAmount = function (text) {
   if (!text) return null;
-  const clean = text.replace(/[\s ]/g, "");
+  // \s also covers the no-break spaces Steam uses in prices ("1 234,50 €").
+  const clean = text.replace(/\s/g, "");
   const match = clean.match(/([+-]?)[^\d+-]*(\d[\d.,']*)/);
   if (!match) return null;
 
@@ -38,7 +39,7 @@ VL.parseAmount = function (text) {
 // Returns the currency part of a price string, for example "€" or "$".
 VL.parseCurrency = function (text) {
   if (!text) return "";
-  return text.replace(/[\s \d.,'+\-]/g, "");
+  return text.replace(/[\s\d.,'+-]/g, "");
 };
 
 // Month names in English and German. Only the first three letters are used.

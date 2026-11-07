@@ -21,6 +21,9 @@ test("parseAmount understands different price formats", () => {
   assert.strictEqual(VL.parseAmount("+0,30€"), 0.3);
   assert.strictEqual(VL.parseAmount("1.234€"), 1234);
   assert.strictEqual(VL.parseAmount("R$ 10,00"), 10);
+  assert.strictEqual(VL.parseAmount("1 234,50 €"), 1234.5);
+  assert.strictEqual(VL.parseAmount("1 234,50 €"), 1234.5);
+  assert.strictEqual(VL.parseCurrency("19,99 €"), "€");
   assert.strictEqual(VL.parseAmount(""), null);
   assert.strictEqual(VL.parseAmount("Free"), null);
 });

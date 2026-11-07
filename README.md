@@ -75,9 +75,20 @@ The extension has no build step. Edit the files and reload the extension.
 - `src/lib/` data loading, parsing and statistics
 - `src/content/` the dashboard on the Steam store page
 - `src/popup/` the toolbar popup
-- `test/unit.test.js` tests for the parsers, run with `node --test test/unit.test.js`
+- `test/unit.test.js` tests for the parsers and statistics
+- `test/manifest.test.js` checks the manifest, the permissions and the content
+  scripts
 - `test/harness.html` a fake Steam page with test data, open it through any
   local web server (for example `npx serve .`) to try the dashboard without Steam
+
+Tests and lint need Node.js 22 or newer. ESLint is the only dev dependency,
+the extension itself uses no packages.
+
+```
+npm install
+npm test
+npm run lint
+```
 
 ## License
 
