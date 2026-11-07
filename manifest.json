@@ -2,8 +2,8 @@
   "manifest_version": 3,
   "name": "Vapor Ledger for Steam",
   "short_name": "Vapor Ledger",
-  "version": "0.1.0",
-  "description": "Free, ad-free stats for your Steam account: spending, playtime, pile of shame, inventory value and market profit. All data stays in your browser.",
+  "version": "0.2.0",
+  "description": "Free Steam stats: spending, playtime, pile of shame, inventory value and market profit. No ads, no tracking, data stays local.",
   "permissions": ["storage"],
   "host_permissions": [
     "https://store.steampowered.com/*",
@@ -49,10 +49,13 @@
   "browser_specific_settings": {
     "gecko": {
       "id": "vapor-ledger@reepze.com",
-      "strict_min_version": "128.0",
+      "strict_min_version": "140.0",
       "data_collection_permissions": {
         "required": ["none"]
       }
+    },
+    "gecko_android": {
+      "strict_min_version": "142.0"
     }
   }
 }

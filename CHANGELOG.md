@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.2.0 (2026-11-07)
 
 - Store value today: current store price of every owned game, with
   discounts, as a tile and a table column
@@ -12,6 +12,9 @@
   cached for a day
 - Market history with profit and loss per item and in total
 - "What Steam really cost you" tile on the store dashboard
+- Search and sorting stay while market prices load
+- Privacy policy, store texts and "npm run pack" to build the store ZIP
+- Firefox 140 or newer
 
 ## 0.1.0 (2026-11-04)
 

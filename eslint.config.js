@@ -2,7 +2,7 @@ const js = require("@eslint/js");
 const globals = require("globals");
 
 module.exports = [
-  { ignores: ["node_modules/"] },
+  { ignores: ["node_modules/", "dist/"] },
   js.configs.recommended,
   {
     // Extension files: plain browser scripts that share the VL global.
@@ -19,7 +19,7 @@ module.exports = [
     },
   },
   {
-    files: ["test/**/*.js", "eslint.config.js"],
+    files: ["test/**/*.js", "scripts/**/*.js", "eslint.config.js"],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: "commonjs",

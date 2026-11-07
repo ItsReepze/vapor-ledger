@@ -10,7 +10,7 @@ browser and the only site the extension talks to is Steam itself.
 
 > Vapor Ledger is a hobby project and not affiliated with Valve or Steam.
 
-## Features (v0.1)
+## Features (v0.2)
 
 - **Total spent**: store purchases, gifts and in-game purchases, minus refunds
 - **Spending per year**
@@ -77,7 +77,7 @@ prices for a day and stops as soon as Steam says "too many requests".
 The token and your data are never sent anywhere except back to Steam. The
 loaded data is kept in the extension's local storage on your computer. You can
 check all of this yourself: the code is plain JavaScript without a build step
-and without any libraries.
+and without any libraries. Details in the [privacy policy](PRIVACY.md).
 
 ## Limits
 
@@ -113,7 +113,12 @@ tests) are the only dev dependencies, the extension itself uses no packages.
 npm install
 npm test
 npm run lint
+npm run pack   # builds dist/vapor-ledger-<version>.zip for the stores
 ```
+
+The ZIP contains only the manifest, the license, `src/` and the PNG icons. The
+same file is uploaded to the Chrome Web Store and to Firefox Add-ons. Store
+texts, review answers and screenshots are in `store/`.
 
 ## License
 
