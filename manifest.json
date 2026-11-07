@@ -16,6 +16,7 @@
         "src/lib/util.js",
         "src/lib/history.js",
         "src/lib/steam.js",
+        "src/lib/prices.js",
         "src/lib/stats.js",
         "src/lib/cache.js",
         "src/content/styles.js",

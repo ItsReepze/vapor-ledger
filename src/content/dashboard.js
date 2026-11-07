@@ -56,8 +56,22 @@ VL.openDashboard = async function () {
         data = { games, transactions, fetchedAt: Date.now() };
         await VL.saveCache(session.steamid, data);
       }
+      // Store prices are a separate step. If they fail, the rest of the
+      // dashboard still works and the next open tries again.
+      if (!data.store && session.country) {
+        showStatus("Loading store prices...");
+        try {
+          const appids = data.games.map((g) => g.appid);
+          data.store = await VL.fetchStorePrices(appids, session.country, (done, total) => {
+            showStatus("Loading store prices (" + done + " of " + total + " games)...");
+          });
+          await VL.saveCache(session.steamid, data);
+        } catch (error) {
+          console.warn("[Vapor Ledger] Store prices not available", error);
+        }
+      }
       updated.textContent = "Data from " + new Date(data.fetchedAt).toLocaleString();
-      renderStats(content, VL.buildStats(data.games, data.transactions));
+      renderStats(content, VL.buildStats(data.games, data.transactions, data.store || null));
     } catch (error) {
       console.error("[Vapor Ledger]", error);
       showStatus("Something went wrong: " + error.message, true);
@@ -102,6 +116,7 @@ function listRow(label, value, muted) {
 
 function renderStats(content, stats) {
   const money = (v) => VL.formatMoney(v, stats.currency);
+  const storeMoney = (v) => VL.formatMoney(v, stats.storeCurrency || stats.currency);
   const percent = stats.gameCount ? Math.round((stats.pileCount / stats.gameCount) * 100) : 0;
 
   const tiles = el("section", {},
@@ -111,7 +126,13 @@ function renderStats(content, stats) {
       tile("Total playtime", VL.formatHours(stats.totalMinutes)),
       tile("Pile of shame", stats.pileCount + " (" + percent + "%)",
         "under " + VL.PILE_OF_SHAME_MINUTES / 60 + " h, " + stats.neverPlayedCount + " never started"),
-      tile("Paid for the pile", money(stats.pilePaid), "known prices only")
+      tile("Paid for the pile", money(stats.pilePaid), "known prices only"),
+      tile("Spent per hour", stats.costPerHour === null ? "-" : money(stats.costPerHour),
+        "total spent / total playtime"),
+      stats.hasStorePrices
+        ? tile("Store value today", storeMoney(stats.storeValue),
+          stats.storePricedCount + " games still for sale, pile: " + storeMoney(stats.pileStoreValue))
+        : null
     )
   );
 
@@ -166,6 +187,14 @@ function renderTable(stats, money) {
     { key: "costPerHour", label: "Per hour", num: true,
       show: (g) => (g.costPerHour === null ? "-" : money(g.costPerHour)) },
   ];
+  if (stats.hasStorePrices) {
+    const storeMoney = (v) => VL.formatMoney(v, stats.storeCurrency || stats.currency);
+    columns.push({ key: "storePrice", label: "Store today", num: true, show: (g) => {
+      if (g.storePrice === null) return "-";
+      if (g.storePrice === 0) return "free";
+      return storeMoney(g.storePrice) + (g.storeDiscount ? " (-" + g.storeDiscount + "%)" : "");
+    } });
+  }
 
   const state = { filter: "all", sort: "minutes", desc: true, search: "" };
   const tbody = el("tbody");
@@ -248,6 +277,11 @@ function renderNotes(stats) {
           .map(([label, count]) => label + " (" + count + ")").join(", "))
         : null,
       el("li", {}, "Games from keys, bundles or gifts have no price on Steam and show \"-\"."),
+      stats.hasStorePrices
+        ? el("li", {}, "Store value today is what the games still for sale would cost in "
+          + "the store right now, including current discounts. Removed games and free "
+          + "games are not counted.")
+        : el("li", {}, "Store prices could not be loaded this time. Click Refresh to try again."),
       el("li", {}, "All data stays in your browser. Vapor Ledger only talks to Steam.")
     )
   );

@@ -62,6 +62,17 @@
       if (String(url).includes("GetOwnedGames")) {
         return new Response(JSON.stringify({ response: { game_count: games.length, games } }));
       }
+      if (String(url).includes("IStoreBrowseService/GetItems")) {
+        // Fake prices: every second game is on sale, Portal 2 is gone from the store.
+        const input = JSON.parse(new URL(url).searchParams.get("input_json"));
+        const store_items = input.ids.map(({ appid }) => appid === 2
+          ? { appid, success: 1, visible: false }
+          : { appid, success: 1, best_purchase_option: {
+              final_price_in_cents: String(appid * 500 - 1),
+              formatted_final_price: ((appid * 500 - 1) / 100).toFixed(2).replace(".", ",") + "€",
+              discount_pct: appid % 2 ? 0 : 50 } });
+        return new Response(JSON.stringify({ response: { store_items } }));
+      }
       if (String(url).endsWith("/account/history/")) return new Response(page1);
       if (String(url).includes("AjaxLoadMoreHistory")) {
         return new Response(JSON.stringify({ success: 1, html: page2 }));
@@ -72,6 +83,7 @@
   <script src="../src/lib/util.js"></script>
   <script src="../src/lib/history.js"></script>
   <script src="../src/lib/steam.js"></script>
+  <script src="../src/lib/prices.js"></script>
   <script src="../src/lib/stats.js"></script>
   <script src="../src/lib/cache.js"></script>
   <script src="../src/content/styles.js"></script>

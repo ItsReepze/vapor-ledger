@@ -15,7 +15,9 @@ browser and the only site the extension talks to is Steam itself.
 - **Spending per year**
 - **Playtime** for every game and in total
 - **Pile of shame**: games with less than 1 hour of playtime
-- **Cost per hour** for games with a known price
+- **Cost per hour** for games with a known price and for the whole account
+- **Store value today**: what your library would cost in the store right now,
+  with today's discounts
 - Sortable and searchable games table
 - Local cache, so the dashboard opens instantly next time
 
@@ -25,7 +27,6 @@ browser and the only site the extension talks to is Steam itself.
 - Market history with profit and loss
 - Quick sell and bulk sell
 - Trade offer value comparison
-- Current store value of your library
 - Shareable summary image
 
 ## Install (for now)
@@ -54,6 +55,7 @@ you are logged in and click "Vapor Ledger" in the top bar.
 |---|---|
 | Games and playtime | `IPlayerService/GetOwnedGames` on api.steampowered.com, using the token Steam already puts on every store page for logged in users |
 | Purchase history | store.steampowered.com/account/history, the same page you see in your account |
+| Store prices | `IStoreBrowseService/GetItems` on api.steampowered.com, the API the store uses for its game tiles. Only app ids and your store country are sent, no token |
 
 The token and your data are never sent anywhere except back to Steam. The
 loaded data is kept in the extension's local storage on your computer. You can

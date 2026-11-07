@@ -24,7 +24,8 @@ function findGame(itemName, gamesByName, sortedNames) {
   return null;
 }
 
-VL.buildStats = function (games, transactions) {
+// store is optional: the result of VL.fetchStorePrices, or null.
+VL.buildStats = function (games, transactions, store) {
   const currency = (transactions.find((t) => t.currency) || {}).currency || "";
 
   // Money
@@ -91,12 +92,17 @@ VL.buildStats = function (games, transactions) {
   const spent = byType.purchase + byType.gift + byType.ingame - byType.refund;
 
   // Games
+  const storePrices = (store && store.prices) || {};
   const rows = games.map((game) => {
     const amount = paid.get(game.appid) ?? null;
     const hours = game.minutes / 60;
+    const price = storePrices[game.appid];
     return {
       ...game,
       paid: amount,
+      // Today's store price, null if Steam doesn't sell the game any more.
+      storePrice: price ? price.cents / 100 : null,
+      storeDiscount: price ? price.discount : 0,
       costPerHour: amount !== null && hours >= 1 ? amount / hours : null,
       shame: game.minutes < VL.PILE_OF_SHAME_MINUTES,
     };
@@ -106,6 +112,10 @@ VL.buildStats = function (games, transactions) {
   const pile = rows.filter((g) => g.shame);
   const neverPlayed = rows.filter((g) => g.minutes === 0);
   const pilePaid = pile.reduce((sum, g) => sum + (g.paid || 0), 0);
+  // Summed in cents, so 1000 prices don't add up float rounding errors.
+  const sumStore = (list) => list.reduce((sum, g) => sum + Math.round((g.storePrice || 0) * 100), 0) / 100;
+  const storeValue = sumStore(rows);
+  const pileStoreValue = sumStore(pile);
 
   return {
     currency,
@@ -123,5 +133,12 @@ VL.buildStats = function (games, transactions) {
     neverPlayedCount: neverPlayed.length,
     pilePaid,
     matchedCount: rows.filter((g) => g.paid !== null).length,
+    hasStorePrices: Boolean(store),
+    storeCurrency: (store && store.currency) || "",
+    storeValue,
+    pileStoreValue,
+    storePricedCount: rows.filter((g) => g.storePrice !== null && g.storePrice > 0).length,
+    // Spent per hour played over the whole account.
+    costPerHour: totalMinutes >= 60 ? spent / (totalMinutes / 60) : null,
   };
 };
