@@ -5,32 +5,35 @@
 ### Single purpose
 
 Vapor Ledger shows statistics about the user's own Steam account (spending,
-playtime, inventory value and market history) in a dashboard on Steam's own
-pages.
+playtime, refund deadlines, inventory value and market history) on its own
+extension page.
 
 ### Permission justifications
 
 **storage**
 Keeps the data loaded from Steam (games, purchase history, inventory, prices)
-in the browser's local extension storage, so the dashboard opens instantly next
+in the browser's local extension storage, so the page opens instantly next
 time and market prices are not requested from Steam again within a day.
 
 **Host permission: https://store.steampowered.com/\***
-The dashboard is shown on the Steam store. The extension reads the logged in
-user's Steam ID from the page and loads the purchase history from
-store.steampowered.com/account/history.
+The extension page loads the purchase history from
+store.steampowered.com/account/history with the user's existing login and
+reads the logged in user's Steam ID and Web API token from that page. A small
+content script adds a "Vapor Ledger" link to the store header that opens the
+extension page.
 
 **Host permission: https://api.steampowered.com/\***
 Reads the user's owned games and playtime (IPlayerService/GetOwnedGames) and
 the current store prices of those games (IStoreBrowseService/GetItems) from
 Steam's official Web API.
 
-**Content script on https://steamcommunity.com/\***
-The inventory and market dashboard is shown on Steam Community, where the
+**Host permission: https://steamcommunity.com/\***
+When the user clicks "Load inventory and market", the extension page loads the
 inventory (steamcommunity.com/inventory), market prices
 (steamcommunity.com/market/priceoverview) and market history
-(steamcommunity.com/market/myhistory) are loaded with the user's existing
-login.
+(steamcommunity.com/market/myhistory) with the user's existing login. The
+same content script as on the store adds the "Vapor Ledger" link to the
+header.
 
 **Remote code**
 No. All JavaScript is included in the package. No eval, no remote scripts.
@@ -73,7 +76,7 @@ https://github.com/ItsReepze/vapor-ledger/blob/HEAD/PRIVACY.md
 - Notes for the reviewer (copy into the "Notes to reviewer" field):
 
   The extension has no build step, the uploaded files are the source. To try
-  it without a Steam account, open test/harness.html and
-  test/harness-community.html from the GitHub repository through any local
-  web server; they use made up data. With a Steam account: log in on
-  store.steampowered.com and click "Vapor Ledger" in the top bar.
+  it without a Steam account, open test/harness.html from the GitHub
+  repository through any local web server; it uses made up data. With a
+  Steam account: log in on store.steampowered.com and click the toolbar
+  button.

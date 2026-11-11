@@ -1,7 +1,9 @@
 # Store listing texts
 
 Texts for the Chrome Web Store and Firefox Add-ons (addons.mozilla.org).
-Chrome's summary allows 132 characters, Firefox's 250.
+Chrome's summary allows 132 characters, Firefox's 250. The name and the
+short description in the manifest come from `_locales/`, so both stores
+show them in English or German depending on the browser.
 
 ## Name
 
@@ -19,43 +21,68 @@ Vapor Ledger for Steam
 - Support: https://github.com/ItsReepze/vapor-ledger/issues
 - Privacy policy: https://github.com/ItsReepze/vapor-ledger/blob/HEAD/PRIVACY.md
 
+## Screenshots
+
+`store/screenshots/`, 1280x800, made from `test/harness.html` with made up
+data:
+
+1. `1-overview.png` overview with totals and games table
+2. `2-refunds.png` refund watch (German interface)
+3. `3-charts.png` charts
+4. `4-worth.png` best and worst purchases
+5. `5-recap.png` recap image and export
+
 ---
 
 ## English
 
 ### Summary (max. 132 characters)
 
-See what your Steam account cost you: spending, playtime, pile of shame, inventory value and market profit. Free, no tracking.
+An honest statement for your Steam account: spending, playtime, refunds, inventory and market. No tracking, data stays local.
 
 ### Description
 
-Vapor Ledger shows the numbers Steam doesn't put in one place.
+Vapor Ledger is an honest statement for your Steam account. Not another price tracker: it shows what you really spent, what you got for it and what you can still do about it.
 
-Library
+Overview
 - Total spent on Steam: store purchases, gifts and in-game purchases, minus refunds
-- Spending per year
-- Playtime for every game and in total
+- Spending per year, playtime for every game and in total
 - Pile of shame: games you played less than an hour
 - Cost per hour for each game and for your whole account
 - What your library would cost in the store today
+
+Refund watch
+- Games bought in the last 14 days with less than 2 hours played are marked as still refundable, with the days and minutes left
+- One click to Steam's own help page for that purchase. Nothing is requested for you, Steam decides
+
+Worth it?
+- Your best and worst purchases by cost per hour
+- What discounts saved you, compared with today's regular price
+
+Charts
+- Spending per month and year, spending over time, playtime ranges, price against playtime
+- Light and dark mode, readable with the keyboard and as a table
 
 Inventory and market
 - Inventory value for Steam items, Counter-Strike 2, Team Fortress 2, Dota 2, Rust and PUBG
 - What you would actually get after Steam's market fees
 - Market history with profit or loss per item and in total
-- One number for what Steam really cost you: spending minus market result minus your items
+- One number for what Steam really cost you
 
-Share
-- Save a summary image with your totals. It shows no Steam ID, name or game list.
+Recap and export
+- Save a recap image for your whole account or one year. No Steam ID, no name, game names only if you want them
+- Export purchases and games as CSV, or everything as JSON
+
+Works in every Steam store language. Purchases in different currencies are shown apart, never added up. Interface in English and German.
 
 Private by design
 - No ads, no tracking, no account, no server of our own.
 - The only site the extension talks to is Steam. Your data stays in your browser.
-- Nothing is ever bought, sold or traded for you.
+- Nothing is ever bought, sold, traded or refunded for you.
 - Free and open source: https://github.com/ItsReepze/vapor-ledger
 
 How to use
-Open store.steampowered.com while logged in and click "Vapor Ledger" in the top bar. Inventory and market stats open the same way on steamcommunity.com.
+Log in on store.steampowered.com, then click the Vapor Ledger button in the toolbar or the "Vapor Ledger" link in Steam's header.
 
 Steam limits how fast its pages may be asked, so the first price check of a big inventory takes a few minutes. Prices are kept for a day.
 
@@ -67,40 +94,52 @@ Vapor Ledger is a hobby project and not affiliated with Valve or Steam.
 
 ### Kurzbeschreibung (max. 132 Zeichen)
 
-Was hat dich Steam wirklich gekostet? Ausgaben, Spielzeit, Pile of Shame, Inventarwert und Marktgewinn. Kostenlos, ohne Tracking.
+Ehrlicher Kontoauszug für dein Steam-Konto: Ausgaben, Spielzeit, Erstattungen, Inventar, Markt. Ohne Tracking, Daten bleiben lokal.
 
 ### Beschreibung
 
-Vapor Ledger zeigt die Zahlen, die Steam nirgends zusammen anzeigt.
+Vapor Ledger ist ein ehrlicher Kontoauszug für dein Steam-Konto. Kein weiteres Preis-Tool: Es zeigt, was du wirklich ausgegeben hast, was du dafür bekommen hast und was du noch tun kannst.
 
-Bibliothek
+Übersicht
 - Gesamtausgaben auf Steam: Käufe, Geschenke und In-Game-Käufe, abzüglich Erstattungen
-- Ausgaben pro Jahr
-- Spielzeit je Spiel und insgesamt
+- Ausgaben pro Jahr, Spielzeit je Spiel und insgesamt
 - Pile of Shame: Spiele mit weniger als einer Stunde Spielzeit
 - Kosten pro Stunde je Spiel und für das ganze Konto
 - Was deine Bibliothek heute im Store kosten würde
+
+Erstattungs-Wächter
+- Spiele aus den letzten 14 Tagen mit weniger als 2 Stunden Spielzeit sind als noch erstattbar markiert, mit verbleibenden Tagen und Minuten
+- Ein Klick zur Hilfeseite von Steam für diesen Kauf. Es wird nichts für dich beantragt, Steam entscheidet
+
+Hat es sich gelohnt?
+- Deine besten und schlechtesten Käufe nach Kosten pro Stunde
+- Was dir Rabatte gespart haben, verglichen mit dem heutigen Normalpreis
+
+Diagramme
+- Ausgaben pro Monat und Jahr, Ausgaben über die Zeit, Spielzeit-Verteilung, Preis gegen Spielzeit
+- Hell und dunkel, mit Tastatur und als Tabelle lesbar
 
 Inventar und Markt
 - Inventarwert für Steam-Items, Counter-Strike 2, Team Fortress 2, Dota 2, Rust und PUBG
 - Was nach den Marktgebühren von Steam wirklich übrig bleibt
 - Markthistorie mit Gewinn oder Verlust je Gegenstand und gesamt
-- Eine Zahl dafür, was Steam dich wirklich gekostet hat: Ausgaben minus Marktergebnis minus Items
+- Eine Zahl dafür, was Steam dich wirklich gekostet hat
 
-Teilen
-- Übersichtsbild mit deinen Summen speichern. Ohne Steam-ID, Namen oder Spieleliste.
+Rückblick und Export
+- Rückblick als Bild für das ganze Konto oder ein Jahr. Ohne Steam-ID, ohne Namen, Spielnamen nur wenn du willst
+- Käufe und Spiele als CSV exportieren, oder alles als JSON
+
+Funktioniert in jeder Steam-Sprache. Käufe in verschiedenen Währungen werden getrennt gezeigt und nie zusammengerechnet. Oberfläche auf Deutsch und Englisch.
 
 Datenschutz von Anfang an
 - Keine Werbung, kein Tracking, kein Konto, kein eigener Server.
 - Die Erweiterung spricht nur mit Steam. Deine Daten bleiben in deinem Browser.
-- Es wird nie etwas für dich gekauft, verkauft oder gehandelt.
+- Es wird nie etwas für dich gekauft, verkauft, gehandelt oder erstattet.
 - Kostenlos und Open Source: https://github.com/ItsReepze/vapor-ledger
 
 So geht's
-Öffne store.steampowered.com, sei eingeloggt und klicke oben auf "Vapor Ledger". Inventar und Markt öffnen sich genauso auf steamcommunity.com.
+Logge dich auf store.steampowered.com ein und klicke dann auf das Vapor-Ledger-Symbol in der Symbolleiste oder auf "Vapor Ledger" oben in der Kopfzeile von Steam.
 
 Steam begrenzt, wie schnell seine Seiten abgefragt werden dürfen. Die erste Preisabfrage eines großen Inventars dauert deshalb ein paar Minuten. Preise werden einen Tag gespeichert.
 
 Vapor Ledger ist ein Hobbyprojekt und gehört nicht zu Valve oder Steam.
-
-Hinweis: Die Oberfläche der Erweiterung ist bisher nur auf Englisch.
