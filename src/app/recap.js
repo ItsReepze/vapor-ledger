@@ -8,8 +8,8 @@ globalThis.VL = VL;
 const RECAP_W = 1200;
 const RECAP_H = 675;
 const RECAP_COLORS = {
-  bg: "#10161d", panel: "#1b2430", text: "#e8ecef", muted: "#97a3ad", accent: "#66c0f4",
-  accent2: "#a4d007", bad: "#e8806e",
+  bg: "#171a21", panel: "#1b2838", text: "#ffffff", muted: "#8f98a0", accent: "#66c0f4",
+  accent2: "#a4d007", bad: "#e06c5a",
 };
 
 // The text on the image, as [label, value, hint]. Kept apart from the

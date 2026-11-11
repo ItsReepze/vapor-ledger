@@ -1,62 +1,52 @@
-/* Vapor Ledger page. Light and dark follow the system setting. */
+/* Vapor Ledger page, in Steam's own style: Steam's colors, fonts, buttons
+   and spacing, so it feels like a page of the Steam store. Steam has no
+   light mode, so neither has this page. */
 
 :root {
-  --bg: #f4f6f8;
-  --panel: #ffffff;
-  --panel-2: #eef1f4;
-  --text: #1b232c;
-  --muted: #56636f;
-  --accent: #1a6fa8;
-  --accent-text: #ffffff;
-  --good: #3b7d0a;
-  --bad: #b3361f;
-  --warn: #8a5a00;
-  --border: #d3d9df;
-  --focus: #0b5cad;
-  color-scheme: light;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #12171d;
-    --panel: #1b232c;
-    --panel-2: #232d38;
-    --text: #e3e7ea;
-    --muted: #9aa6b0;
-    --accent: #66c0f4;
-    --accent-text: #0e141b;
-    --good: #a4d007;
-    --bad: #f08a76;
-    --warn: #e8b64c;
-    --border: #33414f;
-    --focus: #9fd8ff;
-    color-scheme: dark;
-  }
+  --bg: #1b2838;
+  --bar: #171a21;
+  --panel: rgba(0, 0, 0, 0.2);
+  --panel-solid: #16202d;
+  --panel-2: rgba(0, 0, 0, 0.35);
+  --row-alt: rgba(255, 255, 255, 0.03);
+  --text: #c7d5e0;
+  --bright: #ffffff;
+  --muted: #8f98a0;
+  --accent: #66c0f4;
+  --link: #66c0f4;
+  --good: #a4d007;
+  --bad: #e06c5a;
+  --warn: #e5b54a;
+  --border: rgba(255, 255, 255, 0.08);
+  --focus: #66c0f4;
+  color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
 
 body {
   margin: 0;
-  background: var(--bg);
+  background: var(--bg) linear-gradient(to bottom, #171a21 0, #1b2838 360px) no-repeat;
   color: var(--text);
-  font: 15px/1.45 system-ui, "Segoe UI", Arial, sans-serif;
+  font: 14px/1.45 "Motiva Sans", Arial, Helvetica, sans-serif;
 }
 
-a { color: var(--accent); }
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--bright); }
 
 :focus-visible {
-  outline: 3px solid var(--focus);
+  outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
 
+/* Header and tabs like Steam's top bar */
 header.top {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
   max-width: 1160px;
   margin: 0 auto;
-  padding: 18px 20px 8px;
+  padding: 20px 20px 10px;
 }
 
 header.top h1 {
@@ -65,95 +55,139 @@ header.top h1 {
   align-items: center;
   gap: 10px;
   margin: 0;
-  font-size: 22px;
-  font-weight: 600;
+  font-size: 26px;
+  font-weight: 300;
+  color: var(--bright);
+  letter-spacing: 0.02em;
 }
 
-.updated { color: var(--muted); font-size: 13px; }
+.updated { color: var(--muted); font-size: 12px; }
 
 nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px;
   max-width: 1160px;
   margin: 0 auto;
   padding: 0 20px;
-  border-bottom: 1px solid var(--border);
 }
 
 nav button {
   border: none;
-  border-bottom: 3px solid transparent;
   border-radius: 0;
-  background: none;
-  padding: 10px 12px;
-  color: var(--muted);
+  background: transparent;
+  height: 40px;
+  padding: 0 14px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #b8b6b4;
+  border-bottom: 3px solid transparent;
 }
-
+nav button:hover { color: var(--bright); background: transparent; }
 nav button[aria-selected="true"] {
-  color: var(--text);
-  border-bottom-color: var(--accent);
-  font-weight: 600;
+  color: var(--bright);
+  border-bottom-color: #1a9fff;
 }
 
 main {
   max-width: 1160px;
   margin: 0 auto;
-  padding: 16px 20px 32px;
+  padding: 18px 20px 32px;
 }
 
 footer {
   max-width: 1160px;
   margin: 0 auto;
-  padding: 0 20px 24px;
-  color: var(--muted);
-  font-size: 13px;
+  padding: 16px 20px 28px;
+  color: #61686d;
+  font-size: 12px;
+  border-top: 1px solid #2a3f5a;
 }
 
-h2 { font-size: 17px; margin: 24px 0 10px; }
-h3 { font-size: 16px; margin: 0 0 6px; }
+/* Section titles like Steam's store sections */
+h2 {
+  font-size: 14px;
+  font-weight: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--bright);
+  margin: 28px 0 10px;
+  padding-bottom: 4px;
+  background: linear-gradient(to right, #3b6e8c 0%, rgba(59, 110, 140, 0) 70%) no-repeat left bottom / 100% 1px;
+}
+h3 { font-size: 15px; font-weight: normal; color: var(--bright); margin: 0 0 6px; }
 
+/* Buttons and fields like Steam's (btnv6_blue_hoverfade, green purchase) */
 button, select, input[type="search"] {
   font: inherit;
-  color: var(--text);
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 6px 12px;
+  font-size: 14px;
 }
 
-button { cursor: pointer; }
-button:hover { border-color: var(--accent); }
-button:disabled { opacity: 0.5; cursor: default; }
-button.primary { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
-button.danger { color: var(--bad); border-color: var(--bad); }
-button[aria-pressed="true"] { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
+button {
+  color: #67c1f5;
+  background: rgba(103, 193, 245, 0.2);
+  border: none;
+  border-radius: 2px;
+  padding: 0 15px;
+  height: 32px;
+  cursor: pointer;
+}
+button:hover {
+  color: var(--bright);
+  background: linear-gradient(-60deg, #417a9b 5%, #67c1f5 95%);
+}
+button:disabled { opacity: 0.5; cursor: default; background: rgba(103, 193, 245, 0.2); color: #67c1f5; }
+button.primary {
+  color: #d2efa9;
+  background: linear-gradient(to right, #75b022 5%, #588a1b 95%);
+}
+button.primary:hover {
+  color: var(--bright);
+  background: linear-gradient(to right, #8ed629 5%, #6aa621 95%);
+}
+button.danger { color: #e8a39b; background: rgba(193, 87, 85, 0.25); }
+button.danger:hover { color: var(--bright); background: #c15755; }
+button[aria-pressed="true"] { color: var(--bright); background: linear-gradient(-60deg, #417a9b 5%, #67c1f5 95%); }
 
-.status { padding: 32px 0; text-align: center; color: var(--muted); }
+select, input[type="search"] {
+  height: 32px;
+  padding: 0 10px;
+  color: var(--bright);
+  background-color: #222b35;
+  border: 1px solid #000;
+  border-radius: 3px;
+  box-shadow: 1px 1px 0 rgba(255, 255, 255, 0.15);
+}
+select option { background: #222b35; }
+input[type="search"]::placeholder { color: var(--muted); }
+input[type="checkbox"] { accent-color: #66c0f4; width: 16px; height: 16px; }
+
+.status { padding: 40px 0; text-align: center; color: var(--muted); }
 .error { color: var(--bad); }
 .muted { color: var(--muted); }
-.empty { color: var(--muted); font-style: italic; }
+.empty { color: var(--muted); }
 .good { color: var(--good); }
 
+/* Tiles */
 .tiles {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 12px;
+  gap: 8px;
 }
 
 .tile {
   background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 3px;
   padding: 12px 14px;
 }
 
-.tile .label { color: var(--muted); font-size: 13px; }
-.tile .value { font-size: 24px; font-weight: 600; margin: 2px 0; font-variant-numeric: tabular-nums; }
+.tile .label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.03em; }
+.tile .value { font-size: 24px; font-weight: 300; color: var(--bright); margin: 2px 0; font-variant-numeric: tabular-nums; }
 .tile .hint { color: var(--muted); font-size: 12px; }
+.tile.main { background: linear-gradient(135deg, rgba(102, 192, 244, 0.22), rgba(0, 0, 0, 0.2)); }
 .tile.main .value { color: var(--accent); }
-.tile.warn { border-color: var(--warn); }
-.tile.warn .value { font-size: 18px; color: var(--warn); }
+.tile.warn { box-shadow: inset 3px 0 0 var(--warn); }
+.tile.warn .value { font-size: 17px; color: var(--warn); }
 
 .columns {
   display: grid;
@@ -163,9 +197,8 @@ button[aria-pressed="true"] { background: var(--accent); color: var(--accent-tex
 
 .list {
   background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 4px 12px;
+  border-radius: 3px;
+  padding: 2px 12px;
 }
 
 .list-row, .bar-row {
@@ -175,79 +208,84 @@ button[aria-pressed="true"] { background: var(--accent); color: var(--accent-tex
   padding: 7px 0;
   border-bottom: 1px solid var(--border);
 }
-
 .list-row:last-child, .bar-row:last-child { border-bottom: none; }
 .list-row.muted { color: var(--muted); }
 .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
 
 .bar-row { align-items: center; }
 .bar-row > span:first-child { width: 48px; }
-.bar-track { flex: 1; height: 10px; background: var(--panel-2); border-radius: 5px; }
-.bar-fill { height: 100%; background: var(--accent); border-radius: 5px; }
+.bar-track { flex: 1; height: 8px; background: rgba(0, 0, 0, 0.35); border-radius: 2px; }
+.bar-fill { height: 100%; background: linear-gradient(to right, #47bfff, #1a9fff); border-radius: 2px; }
 
-.filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 8px; }
+/* Tables like Steam's account tables */
+.filters { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 8px; }
 .filters input { flex: 1; min-width: 180px; }
-.count { color: var(--muted); font-size: 13px; }
+.count { color: var(--muted); font-size: 12px; }
 
 .table-wrap {
   max-height: 560px;
   overflow: auto;
   background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 3px;
 }
 
-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-th, td { padding: 6px 10px; border-bottom: 1px solid var(--border); text-align: left; }
-th { position: sticky; top: 0; background: var(--panel-2); z-index: 1; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { padding: 7px 10px; text-align: left; }
+tbody tr:nth-child(even) { background: var(--row-alt); }
+tbody tr:hover { background: rgba(102, 192, 244, 0.08); }
+th { position: sticky; top: 0; background: var(--panel-solid); z-index: 1; }
 th.num, td.num { text-align: right; }
-th button.sort { border: none; background: none; padding: 0; font-weight: 600; color: var(--text); }
+th button.sort {
+  height: auto;
+  border: none;
+  background: none;
+  padding: 0;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+}
+th button.sort:hover { color: var(--bright); background: none; }
+th[aria-sort="ascending"] button.sort, th[aria-sort="descending"] button.sort { color: var(--bright); }
 tr.shame td:first-child { color: var(--warn); }
 tr.muted td { color: var(--muted); }
 tr.loss td:last-child { color: var(--bad); }
 tr.gain td:last-child { color: var(--good); }
 
-.notes ul { color: var(--muted); padding-left: 20px; }
+.notes ul { color: var(--muted); padding-left: 20px; font-size: 13px; }
 .notes li { margin: 4px 0; }
 .notes li.error { color: var(--bad); }
 
 .callout {
   background: var(--panel);
-  border: 1px solid var(--border);
-  border-left: 4px solid var(--accent);
-  border-radius: 6px;
+  border-left: 3px solid #1a9fff;
+  border-radius: 3px;
   padding: 4px 16px;
 }
 
+/* Refund cards, with Steam's green discount badge */
 .cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 12px;
+  gap: 8px;
 }
-
-.card {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 14px;
-}
-
-.card.refundable { border-left: 4px solid var(--good); }
+.card { background: var(--panel); border-radius: 3px; padding: 14px; }
+.card.refundable { box-shadow: inset 3px 0 0 #4c6b22; }
 .badge {
   display: inline-block;
-  background: var(--good);
-  color: var(--bg);
+  background: #4c6b22;
+  color: #beee11;
   font-size: 12px;
-  font-weight: 600;
-  border-radius: 3px;
-  padding: 1px 6px;
+  border-radius: 2px;
+  padding: 2px 6px;
   margin-bottom: 8px;
 }
 
-dl { display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; margin: 0 0 10px; font-size: 14px; }
+dl { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; margin: 0 0 12px; font-size: 13px; }
 dt { color: var(--muted); }
-dd { margin: 0; font-variant-numeric: tabular-nums; }
+dd { margin: 0; color: var(--bright); font-variant-numeric: tabular-nums; }
 
+/* Rankings */
 ol.rank { list-style: none; counter-reset: rank; padding: 0; margin: 0; }
 ol.rank li {
   counter-increment: rank;
@@ -256,63 +294,82 @@ ol.rank li {
   gap: 0 8px;
   padding: 8px 12px;
   background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  margin-bottom: 6px;
+  border-radius: 3px;
+  margin-bottom: 4px;
 }
 ol.rank li::before { content: counter(rank) "."; color: var(--muted); grid-row: span 2; }
-.rank-value { font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; }
-.rank-detail { grid-column: 2 / 4; color: var(--muted); font-size: 13px; }
+.rank-name { color: var(--bright); }
+.rank-value { text-align: right; font-variant-numeric: tabular-nums; color: var(--accent); }
+.rank-value.good { color: var(--good); }
+.rank-detail { grid-column: 2 / 4; color: var(--muted); font-size: 12px; }
 
+/* Charts */
 .charts {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(440px, 1fr));
-  gap: 16px;
+  gap: 12px;
 }
 .chart-wide { grid-column: 1 / -1; }
-
-.chart {
-  margin: 0;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 12px;
+.chart { margin: 0; background: var(--panel); border-radius: 3px; padding: 12px; }
+.chart figcaption {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--bright);
+  margin-bottom: 6px;
 }
-.chart figcaption { font-weight: 600; margin-bottom: 6px; }
 .chart-box { position: relative; }
 .chart-svg { width: 100%; height: auto; display: block; }
-.chart-svg .grid { stroke: var(--border); stroke-width: 1; }
-.chart-svg .baseline { stroke: var(--muted); stroke-width: 1; }
-.chart-svg .axis { fill: var(--muted); font-size: 11px; }
-.chart-svg .bar { fill: var(--accent); }
+.chart-svg .grid { stroke: rgba(255, 255, 255, 0.07); stroke-width: 1; }
+.chart-svg .baseline { stroke: #4b5a68; stroke-width: 1; }
+.chart-svg .axis { fill: var(--muted); font-size: 11px; font-family: "Motiva Sans", Arial, sans-serif; }
+.chart-svg .bar { fill: #66c0f4; }
 .chart-svg .bar.negative { fill: var(--bad); }
-.chart-svg .bar.active, .chart-svg .point.active { fill: var(--warn); }
-.chart-svg .line { fill: none; stroke: var(--accent); stroke-width: 2.5; }
-.chart-svg .area { fill: var(--accent); opacity: 0.12; }
-.chart-svg .dot { fill: var(--warn); stroke: var(--panel); stroke-width: 2; }
-.chart-svg .point { fill: var(--accent); opacity: 0.75; }
+.chart-svg .bar.active, .chart-svg .point.active { fill: var(--bright); }
+.chart-svg .line { fill: none; stroke: #66c0f4; stroke-width: 2.5; }
+.chart-svg .area { fill: #66c0f4; opacity: 0.12; }
+.chart-svg .dot { fill: var(--bright); stroke: #1a9fff; stroke-width: 2; }
+.chart-svg .point { fill: #66c0f4; opacity: 0.8; }
 .chart-tip {
   position: absolute;
   pointer-events: none;
-  background: var(--text);
-  color: var(--bg);
-  font-size: 13px;
+  background: #c2c2c2;
+  color: #3d3d3f;
+  font-size: 12px;
   padding: 4px 8px;
-  border-radius: 4px;
+  border-radius: 2px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.6);
   white-space: nowrap;
   max-width: 320px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.chart details { margin-top: 6px; font-size: 13px; }
+.chart details { margin-top: 6px; font-size: 12px; color: var(--muted); }
+.chart summary { cursor: pointer; }
 .chart-table { margin-top: 6px; }
 .chart-table td, .chart-table th { padding: 3px 8px; }
 label.inline { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 8px; }
 
-.form-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 8px 0 12px; }
-.recap-preview { width: 100%; max-width: 900px; height: auto; border-radius: 6px; border: 1px solid var(--border); }
+.form-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 8px 0 12px; }
+.recap-preview { width: 100%; max-width: 900px; height: auto; border-radius: 3px; box-shadow: 0 0 12px rgba(0, 0, 0, 0.5); }
 .progress { margin: 12px 0; color: var(--muted); }
 
+/* Settings */
+.settings { display: grid; gap: 4px; }
+.setting {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  background: var(--panel);
+  border-radius: 3px;
+  padding: 12px 14px;
+}
+.setting input { margin-top: 2px; flex: none; }
+.setting label { display: grid; gap: 2px; cursor: pointer; }
+.setting-name { color: var(--bright); }
+.setting-hint { color: var(--muted); font-size: 13px; }
+.setting-pages { color: #61686d; font-size: 12px; }
+
 @media (prefers-reduced-motion: no-preference) {
-  .chart-svg .bar, .chart-svg .point { transition: fill 0.1s; }
+  button, .chart-svg .bar, .chart-svg .point { transition: background 0.15s, color 0.15s, fill 0.1s; }
 }
