@@ -1,6 +1,6 @@
-// Inventory and market prices from steamcommunity.com. The extension page
-// loads them with the user's own Steam Community login, the same data the
-// inventory and market pages load.
+// Inventory and market prices from steamcommunity.com, loaded with the
+// user's own Steam Community login, the same data the inventory and market
+// pages load.
 //
 // Steam limits these endpoints hard. All requests go one after another with
 // a pause, and a "429 Too Many Requests" stops loading instead of retrying.
@@ -14,9 +14,10 @@ const COMMUNITY = "https://steamcommunity.com";
 // (about 20 requests per minute).
 const INVENTORY_DELAY_MS = 2000;
 const PRICE_DELAY_MS_COMMUNITY = 3500;
+VL.PRICE_DELAY_SECONDS = PRICE_DELAY_MS_COMMUNITY / 1000;
 
-// Prices are kept for one day, so opening the dashboard again doesn't
-// ask Steam for every price again.
+// Prices are kept for one day, so opening the page again doesn't ask
+// Steam for every price again.
 VL.PRICE_MAX_AGE_MS = 24 * 60 * 60 * 1000;
 
 // Inventories we look at: [appid, contextid, label].
@@ -76,7 +77,9 @@ VL.openCommunity = async function () {
 };
 
 // Turns one inventory page into a list of item stacks:
-// { appid, name, hashName, type, marketable, count, icon }.
+// { appid, name, hashName, type, marketable, count, icon, feeApp }.
+// feeApp is the game a Steam community item (card, background, emoticon)
+// belongs to.
 // Items with the same market name are counted together.
 VL.parseInventory = function (data) {
   if (!data || !Array.isArray(data.assets)) return [];
@@ -102,6 +105,7 @@ VL.parseInventory = function (data) {
         marketable: d.marketable === 1,
         count: amount,
         icon: d.icon_url || "",
+        feeApp: d.market_fee_app ? Number(d.market_fee_app) : null,
       });
     }
   }
@@ -112,7 +116,7 @@ VL.parseInventory = function (data) {
 VL.mergeStacks = function (lists) {
   const merged = new Map();
   for (const stack of lists.flat()) {
-    const key = stack.appid + "/" + stack.hashName;
+    const key = VL.priceKey(stack);
     if (merged.has(key)) merged.get(key).count += stack.count;
     else merged.set(key, { ...stack });
   }
@@ -120,7 +124,7 @@ VL.mergeStacks = function (lists) {
 };
 
 async function communityGet(url) {
-  const response = await fetch(url, { credentials: "include" });
+  const response = await VL.request(url);
   if (response.status === 429) throw new VL.RateLimitError();
   return response;
 }
@@ -174,26 +178,102 @@ VL.fetchPrice = async function (appid, hashName, currency) {
   return VL.parsePriceOverview(await response.json());
 };
 
-// Loads prices for all marketable stacks that have no fresh price in
-// `known` yet. `known` is { "appid/hashName": { cents, text, at } } and is
-// updated in place. onProgress(done, total) is called after each price;
-// return false from shouldContinue() to stop early.
-VL.fetchPrices = async function (stacks, currency, known, onProgress, shouldContinue) {
-  const now = Date.now();
-  const todo = stacks.filter((s) => {
+VL.priceKey = function (stack) {
+  return stack.appid + "/" + stack.hashName;
+};
+
+// Marketable stacks without a fresh price in known.
+VL.stalePrices = function (stacks, known, now) {
+  return stacks.filter((s) => {
     if (!s.marketable) return false;
-    const price = known[s.appid + "/" + s.hashName];
-    return !price || now - price.at > VL.PRICE_MAX_AGE_MS;
+    const price = known[VL.priceKey(s)];
+    return !price || (now || Date.now()) - price.at > VL.PRICE_MAX_AGE_MS;
   });
-  for (let i = 0; i < todo.length; i++) {
+};
+
+// Prices of all Steam community items of one game (cards, backgrounds,
+// emoticons) in one request, through the market search Steam's own market
+// pages use. Returns { hashName: { cents, text } }.
+VL.fetchGameItemPrices = async function (feeApp) {
+  const params = new URLSearchParams({ norender: "1", appid: "753", count: "100", start: "0" });
+  params.append("category_753_Game[]", "tag_app_" + feeApp);
+  const response = await communityGet(COMMUNITY + "/market/search/render/?" + params);
+  if (!response.ok) return {};
+  return VL.parseMarketSearch(await response.json());
+};
+
+VL.parseMarketSearch = function (data) {
+  const prices = {};
+  for (const item of (data && data.success && data.results) || []) {
+    if (!item.hash_name || !item.sell_price_text || !item.sell_price) continue;
+    prices[item.hash_name] = { cents: Number(item.sell_price), text: item.sell_price_text };
+  }
+  return prices;
+};
+
+// Loads prices for all marketable stacks without a fresh price in known.
+// known is { "appid/hashName": { cents, text, at } } and is updated in
+// place, so everything loaded so far is kept when loading stops.
+//
+// To ask Steam as little as possible:
+// - Steam community items are asked per game, one request for all cards,
+//   backgrounds and emoticons of that game. These answers are only used if
+//   their currency matches the single item prices.
+// - Everything else is asked one by one, the biggest stacks first.
+// onProgress(done, total) is called after each request; return false from
+// shouldContinue() to stop.
+VL.fetchPrices = async function (stacks, currency, known, onProgress, shouldContinue) {
+  const todo = VL.stalePrices(stacks, known);
+  const store = (stack, price) => {
+    known[VL.priceKey(stack)] = price ? { ...price, at: Date.now() } : { cents: null, text: "", at: Date.now() };
+  };
+  const knownCurrency = () => {
+    const sample = Object.values(known).find((p) => p.text);
+    return sample ? VL.parseCurrency(sample.text) : null;
+  };
+
+  const byGame = new Map();
+  const single = [];
+  for (const stack of todo) {
+    if (stack.appid === 753 && stack.feeApp) {
+      if (!byGame.has(stack.feeApp)) byGame.set(stack.feeApp, []);
+      byGame.get(stack.feeApp).push(stack);
+    } else {
+      single.push(stack);
+    }
+  }
+  // A game with only one item is cheaper to ask directly.
+  for (const [game, list] of byGame) {
+    if (list.length < 2) {
+      single.push(...list);
+      byGame.delete(game);
+    }
+  }
+  single.sort((a, b) => b.count - a.count);
+
+  const steps = [...byGame.values()].map((list) => ({ list })).concat(single.map((stack) => ({ stack })));
+  // One single price first, so the currency of the batch answers can be checked.
+  if (!knownCurrency() && byGame.size) {
+    const first = steps.findIndex((step) => step.stack);
+    if (first > 0) steps.unshift(steps.splice(first, 1)[0]);
+  }
+
+  for (let i = 0; i < steps.length; i++) {
     if (shouldContinue && !shouldContinue()) break;
     if (i > 0) await VL.sleep(PRICE_DELAY_MS_COMMUNITY);
-    const stack = todo[i];
-    const price = await VL.fetchPrice(stack.appid, stack.hashName, currency);
-    known[stack.appid + "/" + stack.hashName] = price
-      ? { ...price, at: Date.now() }
-      : { cents: null, text: "", at: Date.now() };
-    onProgress && onProgress(i + 1, todo.length);
+    const step = steps[i];
+    if (step.stack) {
+      store(step.stack, await VL.fetchPrice(step.stack.appid, step.stack.hashName, currency));
+    } else {
+      const prices = await VL.fetchGameItemPrices(step.list[0].feeApp);
+      const expected = knownCurrency();
+      const usable = Object.values(prices).every((p) => !expected || VL.parseCurrency(p.text) === expected);
+      for (const stack of step.list) {
+        if (usable && prices[stack.hashName]) store(stack, prices[stack.hashName]);
+        else steps.push({ stack }); // not in the answer: ask it on its own later
+      }
+    }
+    onProgress && onProgress(i + 1, steps.length);
   }
   return known;
 };
@@ -222,7 +302,7 @@ VL.buildInventoryStats = function (stacks, prices) {
   let pricedCount = 0;
   let currencyText = "";
   const rows = stacks.map((stack) => {
-    const price = prices[stack.appid + "/" + stack.hashName];
+    const price = prices[VL.priceKey(stack)];
     const cents = price && price.cents !== null ? price.cents : null;
     if (cents !== null) {
       valueCents += cents * stack.count;

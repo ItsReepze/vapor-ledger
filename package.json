@@ -1,6 +1,6 @@
 {
   "name": "vapor-ledger",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "description": "Development tools for the Vapor Ledger browser extension. The extension itself has no build step and no dependencies.",
   "license": "MIT",

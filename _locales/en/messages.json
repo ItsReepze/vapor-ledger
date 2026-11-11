@@ -5,9 +5,6 @@
   "extDescription": {
     "message": "An honest statement for your Steam account: spending, playtime, refunds, inventory and market. No tracking, data stays local."
   },
-  "langCode": {
-    "message": "en"
-  },
   "appTitle": {
     "message": "Vapor Ledger"
   },
@@ -20,17 +17,8 @@
   "tab_refunds": {
     "message": "Refunds"
   },
-  "tab_worth": {
-    "message": "Worth it?"
-  },
-  "tab_charts": {
-    "message": "Charts"
-  },
   "tab_inventory": {
     "message": "Inventory & market"
-  },
-  "tab_share": {
-    "message": "Recap & export"
   },
   "refresh": {
     "message": "Load again from Steam"
@@ -49,9 +37,6 @@
   },
   "loadingHistory": {
     "message": "Loading purchase history (page {0}, {1} entries)..."
-  },
-  "loadingStorePrices": {
-    "message": "Loading store prices..."
   },
   "loadingStorePricesCount": {
     "message": "Loading store prices ({0} of {1} games)..."
@@ -79,9 +64,6 @@
   },
   "loginLink": {
     "message": "Open the Steam login"
-  },
-  "loginRetry": {
-    "message": "I'm logged in, try again"
   },
   "communityLogin": {
     "message": "You are not logged in on steamcommunity.com in this browser. Log in there to load inventory and market."
@@ -118,9 +100,6 @@
   },
   "tileSpentHint": {
     "message": "purchases, gifts and in-game, minus refunds"
-  },
-  "tileGames": {
-    "message": "Games"
   },
   "tilePlaytime": {
     "message": "Total playtime"
@@ -160,12 +139,6 @@
   },
   "spendingTitle": {
     "message": "Spending"
-  },
-  "perYearTitle": {
-    "message": "Spending per year"
-  },
-  "noPurchases": {
-    "message": "No purchases found"
   },
   "typePurchase": {
     "message": "Store purchases"
@@ -615,7 +588,7 @@
     "message": "Settings"
   },
   "settingsTitle": {
-    "message": "Improvements on Steam's pages"
+    "message": "Better Steam pages"
   },
   "settingsIntro": {
     "message": "Vapor Ledger can make some of Steam's own pages easier to use. It only changes how they look and work in this browser. Saving and everything else still goes through Steam's own buttons. Each improvement can be switched off."
@@ -624,10 +597,10 @@
     "message": "Changes apply the next time a Steam page is opened or reloaded."
   },
   "set_headerLink": {
-    "message": "Vapor Ledger link in Steam's header"
+    "message": "Vapor Ledger in the account menu"
   },
   "set_headerLink_hint": {
-    "message": "A link next to your account menu that opens this page."
+    "message": "An entry in the menu under your name at the top of Steam, which opens Vapor Ledger."
   },
   "set_profileEdit": {
     "message": "Better profile editing"
@@ -715,5 +688,89 @@
   },
   "lcCount": {
     "message": "{0} of {1} licenses"
+  },
+  "tab_spending": {
+    "message": "Spending"
+  },
+  "tab_games": {
+    "message": "Games"
+  },
+  "tab_recap": {
+    "message": "Recap"
+  },
+  "appKicker": {
+    "message": "Your Steam account"
+  },
+  "heroGames": {
+    "message": "{0} games"
+  },
+  "showDetails": {
+    "message": "Show details"
+  },
+  "hlRefundable": {
+    "message": "Still refundable"
+  },
+  "hlRefundableValue": {
+    "message": "{0} games"
+  },
+  "hlRefundableNext": {
+    "message": "{0}: {1} days left"
+  },
+  "hlThisYear": {
+    "message": "Spent in {0}"
+  },
+  "hlLastYear": {
+    "message": "last year {0}"
+  },
+  "hlBest": {
+    "message": "Best purchase"
+  },
+  "hlWorst": {
+    "message": "Worst purchase"
+  },
+  "hlInventory": {
+    "message": "Items, after fees"
+  },
+  "hlInventoryLoad": {
+    "message": "Not loaded yet"
+  },
+  "moreSpending": {
+    "message": "More: spending over time and savings"
+  },
+  "moreGames": {
+    "message": "More: playtime charts"
+  },
+  "colHistoricalLow": {
+    "message": "Lowest ever"
+  },
+  "sourcesTitle": {
+    "message": "Price sources outside Steam"
+  },
+  "sourcesIntro": {
+    "message": "Off unless you switch them on. Only Steam app ids and your store country are sent, never your Steam ID, token or purchase history."
+  },
+  "set_steamdbLinks": {
+    "message": "Links to SteamDB"
+  },
+  "set_steamdbLinks_hint": {
+    "message": "Adds a SteamDB link to every game in the games table. Nothing is loaded from SteamDB."
+  },
+  "set_itad": {
+    "message": "Lowest prices from IsThereAnyDeal"
+  },
+  "set_itad_hint": {
+    "message": "Shows the lowest price each game ever had, through IsThereAnyDeal's official API. Needs your own free API key."
+  },
+  "itadKeyPlaceholder": {
+    "message": "IsThereAnyDeal API key"
+  },
+  "itadKeySave": {
+    "message": "Save key"
+  },
+  "itadKeySaved": {
+    "message": "Saved. Reload the page to load the prices."
+  },
+  "itadKeyGet": {
+    "message": "How to get a key"
   }
 }

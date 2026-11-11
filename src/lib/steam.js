@@ -1,11 +1,10 @@
 // Everything that talks to the Steam store and Steam's Web API. All requests
 // go to Steam's own servers and nowhere else.
 //
-// The extension page is not a Steam page, so it loads the purchase history
-// page from store.steampowered.com with the browser's Steam login (the
-// host permission lets the browser send the Steam cookies). The logged in
-// user, the Web API token and the session id are read from that page's
-// HTML. Nothing in it is executed.
+// The Vapor Ledger page runs on the store, so it loads the purchase history
+// page from store.steampowered.com with the user's Steam login, like the
+// store itself. The logged in user, the Web API token and the session id
+// are read from that page's HTML. Nothing in it is executed.
 
 var VL = globalThis.VL || {};
 globalThis.VL = VL;
@@ -64,7 +63,7 @@ VL.fetchOwnedGames = async function (session) {
     include_appinfo: "1",
     include_played_free_games: "1",
   });
-  const response = await fetch(API + "/IPlayerService/GetOwnedGames/v1/?" + params);
+  const response = await VL.request(API + "/IPlayerService/GetOwnedGames/v1/?" + params);
   if (!response.ok) throw new Error("GetOwnedGames failed: HTTP " + response.status);
   const data = await response.json();
   const games = (data.response && data.response.games) || [];
@@ -94,7 +93,7 @@ VL.readHistoryCursor = function (doc) {
 // Loads the first page of the purchase history. It also tells us who is
 // logged in. Throws NotLoggedInError if Steam shows the login page instead.
 VL.openHistoryPage = async function () {
-  const response = await fetch(STORE + "/account/history/", { credentials: "include" });
+  const response = await VL.request(STORE + "/account/history/");
   if (!response.ok) throw new Error("Purchase history failed: HTTP " + response.status);
   // DOMParser builds a document without running any of its scripts.
   const doc = new DOMParser().parseFromString(await response.text(), "text/html");
@@ -122,10 +121,10 @@ VL.fetchPurchaseHistory = async function (first, onProgress) {
       body.append("cursor[" + key + "]", value);
     }
 
-    const more = await fetch(STORE + "/account/AjaxLoadMoreHistory/", {
+    const more = await VL.request(STORE + "/account/AjaxLoadMoreHistory/", {
       method: "POST",
-      credentials: "include",
-      body,
+      body: body.toString(),
+      contentType: "application/x-www-form-urlencoded; charset=UTF-8",
     });
     if (!more.ok) return { transactions, complete: false };
     const data = await more.json().catch(() => null);

@@ -27,7 +27,8 @@ VL.content.runFeature = async function (key, fn) {
 // Calls fn now and whenever Steam's page changes (pages built with React
 // render late and swap their content without a page load). fn must be
 // safe to call many times.
-VL.content.watch = function (fn) {
+// root: the part of the page to watch (as small as possible).
+VL.content.watch = function (fn, root) {
   let queued = false;
   const run = () => {
     queued = false;
@@ -42,7 +43,7 @@ VL.content.watch = function (fn) {
     if (queued || !VL.content.addedBySteam(records)) return;
     queued = true;
     requestAnimationFrame(run);
-  }).observe(document.body, { childList: true, subtree: true });
+  }).observe(root || document.body, { childList: true, subtree: true });
 };
 
 // True if Steam added elements to the page. Our own additions (class
@@ -72,6 +73,41 @@ VL.content.searchBox = function (placeholder, oninput) {
     "aria-label": placeholder,
     oninput,
   });
+};
+
+// A search field and a select above one of Steam's tables, hiding rows
+// that don't match. Used by the purchase history and the licenses page.
+// options: { rows() -> [tr], search, choice: { label, options: [[value, text]], of(row) },
+//   count(shown, all) -> text, extra: [elements] }
+// Returns { bar, apply }.
+VL.content.rowFilter = function (options) {
+  const el = VL.el;
+  const state = { search: "", choice: "" };
+  const count = el("span", { class: "vl-count", "aria-live": "polite" });
+  const search = VL.content.searchBox(options.search, (e) => {
+    state.search = e.target.value.toLowerCase();
+    apply();
+  });
+  const choice = options.choice && options.choice.options.length > 1
+    ? el("select", { class: "vl-select", "aria-label": options.choice.label,
+      onchange: (e) => { state.choice = e.target.value; apply(); } },
+    options.choice.options.map(([value, text]) => el("option", { value }, text)))
+    : null;
+
+  function apply() {
+    const all = options.rows();
+    let shown = 0;
+    for (const row of all) {
+      const match = (!state.search || row.textContent.toLowerCase().includes(state.search))
+        && (!state.choice || String(options.choice.of(row)) === state.choice);
+      row.classList.toggle("vl-hidden", !match);
+      if (match) shown++;
+    }
+    count.textContent = options.count(shown, all.length);
+  }
+
+  const bar = el("div", { class: "vl-ui vl-toolbar" }, search, choice, ...(options.extra || []), count);
+  return { bar, apply };
 };
 
 // "Save" in all Steam languages, to find Steam's own save button.

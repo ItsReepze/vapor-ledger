@@ -1,5 +1,5 @@
-// Checks the manifest, the extension page and the scripts for mistakes
-// that the browser would only report at runtime. Run with: npm test
+// Checks the manifest and the scripts for mistakes that the browser would
+// only report at runtime. Run with: npm test
 const test = require("node:test");
 const assert = require("node:assert");
 const fs = require("node:fs");
@@ -8,14 +8,13 @@ const path = require("node:path");
 const root = path.join(__dirname, "..");
 const manifest = JSON.parse(fs.readFileSync(path.join(root, "manifest.json"), "utf8"));
 const contentScripts = manifest.content_scripts.flatMap((c) => c.js);
+const ledgerEntry = manifest.content_scripts.find((c) => c.js.includes("src/ledger/page.js"));
 
-// The scripts of the extension page, in the order app.html loads them.
-function pageScripts(htmlFile) {
-  const source = fs.readFileSync(path.join(root, htmlFile), "utf8");
-  const dir = path.posix.dirname(htmlFile);
-  return [...source.matchAll(/<script src="([^"]+)"/g)].map((m) => path.posix.normalize(dir + "/" + m[1]));
+function srcFiles(ext) {
+  const walk = (dir) => fs.readdirSync(path.join(root, dir), { withFileTypes: true }).flatMap((entry) =>
+    entry.isDirectory() ? walk(dir + "/" + entry.name) : [dir + "/" + entry.name]);
+  return walk("src").filter((f) => f.endsWith(ext));
 }
-const appScripts = pageScripts("src/app/app.html");
 
 test("permissions stay minimal", () => {
   // A new permission or host must be a deliberate decision. If you change
@@ -25,6 +24,7 @@ test("permissions stay minimal", () => {
     "https://store.steampowered.com/*",
     "https://api.steampowered.com/*",
     "https://steamcommunity.com/*",
+    "https://api.isthereanydeal.com/*",
   ]);
   assert.strictEqual(manifest.web_accessible_resources, undefined);
   assert.strictEqual(manifest.optional_permissions, undefined);
@@ -35,36 +35,53 @@ test("permissions stay minimal", () => {
   }
 });
 
-test("on all Steam pages only the small header link runs", () => {
+test("on all Steam pages only the small menu entry runs", () => {
   const everywhere = manifest.content_scripts.filter((c) => c.matches.some((m) => /\.com\/\*$/.test(m)));
   assert.deepStrictEqual(everywhere.flatMap((c) => c.js), ["src/content/link.js"]);
-  // The other scripts only run on the pages they improve.
+  // Everything else only runs on the pages it belongs to.
   for (const entry of manifest.content_scripts) {
     if (entry === everywhere[0]) continue;
-    for (const match of entry.matches) assert.match(match, /\/(edit|account\/history|account\/licenses)\*$/);
+    for (const match of entry.matches) {
+      assert.match(match, /\/(edit\*|account\/|account\/\?\*|account\/history\*|account\/licenses\*)$/);
+    }
   }
 });
 
-test("scripts on Steam's pages never load anything or read cookies", () => {
-  for (const file of new Set(contentScripts)) {
+test("only request.js talks to servers, nothing reads cookies", () => {
+  for (const file of srcFiles(".js")) {
     const source = fs.readFileSync(path.join(root, file), "utf8");
-    assert.doesNotMatch(source, /fetch\(|XMLHttpRequest|document\.cookie|sendBeacon|\.submit\(/, file);
+    assert.doesNotMatch(source, /XMLHttpRequest|document\.cookie|sendBeacon|\.submit\(/, file);
+    if (!["src/lib/request.js", "src/background.js"].includes(file)) assert.doesNotMatch(source, /\bfetch\(/, file);
+  }
+  // The improvements of Steam's pages don't even load request.js.
+  for (const entry of manifest.content_scripts) {
+    if (entry !== ledgerEntry) assert.ok(!entry.js.includes("src/lib/request.js"));
   }
 });
 
-test("all files referenced by the manifest and the page exist", () => {
+test("the background script only passes requests to allowed hosts", () => {
+  const source = fs.readFileSync(path.join(root, "src/background.js"), "utf8");
+  assert.match(source, /VL\.ALLOWED_HOSTS\.includes\(target\.hostname\)/);
+  assert.match(source, /target\.protocol !== "https:"/);
+  assert.match(source, /sender\.id !== chrome\.runtime\.id/);
+  assert.deepStrictEqual(manifest.background.scripts, ["src/lib/request.js", "src/background.js"]);
+});
+
+test("all files referenced by the manifest exist", () => {
   const files = [
     ...contentScripts,
     ...manifest.background.scripts,
     manifest.background.service_worker,
     ...Object.values(manifest.icons),
     ...Object.values(manifest.action.default_icon),
-    ...appScripts,
     ...manifest.content_scripts.flatMap((c) => c.css || []),
-    "src/app/app.css",
   ];
   for (const file of files) {
     assert.ok(fs.existsSync(path.join(root, file)), file + " is missing");
+  }
+  // Every script in src/ is used somewhere.
+  for (const file of srcFiles(".js")) {
+    assert.ok(contentScripts.includes(file) || manifest.background.scripts.includes(file), file + " is not used");
   }
 });
 
@@ -82,11 +99,11 @@ test("package.json and manifest have the same version", () => {
   assert.strictEqual(pkg.version, manifest.version);
 });
 
-test("the page scripts don't declare the same top level name twice", () => {
-  // All scripts of the page run in one shared scope. Two top level "const x"
-  // in different files would stop the second file with a SyntaxError.
-  // "var VL" is the one name every file is allowed to repeat.
-  for (const list of [appScripts, ...manifest.content_scripts.map((c) => c.js)]) {
+test("scripts that share a page don't declare the same top level name twice", () => {
+  // The scripts of one manifest entry run in one shared scope. Two top
+  // level "const x" in different files would stop the second file with a
+  // SyntaxError. "var VL" is the one name every file is allowed to repeat.
+  for (const list of manifest.content_scripts.map((c) => c.js)) {
     const seen = new Map();
     for (const file of list) {
       const source = fs.readFileSync(path.join(root, file), "utf8");
@@ -100,35 +117,26 @@ test("the page scripts don't declare the same top level name twice", () => {
   }
 });
 
-test("the test page loads the same scripts as the extension page", () => {
-  const harness = pageScripts("test/harness.html");
-  assert.deepStrictEqual(harness.slice(0, appScripts.length - 1), appScripts.slice(0, -1));
-  assert.strictEqual(appScripts[appScripts.length - 1], "src/app/start.js");
+test("the test page loads the same scripts as the Vapor Ledger page", () => {
+  const source = fs.readFileSync(path.join(root, "test/harness.html"), "utf8");
+  const harness = [...source.matchAll(/<script src="\.\.\/([^"]+)"/g)].map((m) => m[1]);
+  assert.deepStrictEqual(harness, ledgerEntry.js.slice(0, -1));
+  assert.strictEqual(ledgerEntry.js[ledgerEntry.js.length - 1], "src/ledger/start.js");
 });
 
 test("no innerHTML or eval in the extension code", () => {
-  const files = [];
-  const walk = (dir) => {
-    for (const entry of fs.readdirSync(path.join(root, dir), { withFileTypes: true })) {
-      const rel = dir + "/" + entry.name;
-      if (entry.isDirectory()) walk(rel);
-      else if (rel.endsWith(".js") || rel.endsWith(".html")) files.push(rel);
-    }
-  };
-  walk("src");
-  for (const file of files) {
+  for (const file of srcFiles(".js")) {
     const source = fs.readFileSync(path.join(root, file), "utf8");
     assert.doesNotMatch(source, /\.innerHTML\s*=|\.outerHTML\s*=|insertAdjacentHTML|\beval\(|new Function\(/, file);
-    if (file.endsWith(".html")) assert.doesNotMatch(source, /<script>|<script [^>]*>[^<]/, file + " has inline script");
   }
 });
 
-test("the only hosts the code talks to are Steam's", () => {
-  const allowed = /^https:\/\/(store\.steampowered\.com|api\.steampowered\.com|steamcommunity\.com|help\.steampowered\.com)/;
+test("the code only talks to Steam and the optional price services", () => {
+  // Requests: Steam and IsThereAnyDeal. Links only: Steam's help pages,
+  // SteamDB and IsThereAnyDeal's documentation.
+  const allowed = /^https:\/\/(store\.steampowered\.com|api\.steampowered\.com|steamcommunity\.com|help\.steampowered\.com|api\.isthereanydeal\.com|docs\.isthereanydeal\.com\/|steamdb\.info\/app\/)/;
   const ignore = /^http:\/\/www\.w3\.org\/2000\/svg$/; // the SVG namespace, not a request
-  const walk = (dir) => fs.readdirSync(path.join(root, dir), { withFileTypes: true }).flatMap((entry) =>
-    entry.isDirectory() ? walk(dir + "/" + entry.name) : [dir + "/" + entry.name]);
-  for (const file of walk("src").filter((f) => f.endsWith(".js"))) {
+  for (const file of srcFiles(".js")) {
     const source = fs.readFileSync(path.join(root, file), "utf8");
     for (const [url] of source.matchAll(/https?:\/\/[^\s"'`)]+/g)) {
       if (!ignore.test(url)) assert.match(url, allowed, file + ": " + url);

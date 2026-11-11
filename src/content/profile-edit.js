@@ -20,10 +20,14 @@
   let dirty = false;
   let lastSave = null;
 
+  // Steam builds the edit page inside #application_root.
+  const root = () => document.getElementById("application_root") || document.body;
+
   // Steam's Save button: a visible button whose text is "Save" in the
-  // page language.
+  // page language, inside Steam's own page (not one added by another
+  // extension elsewhere).
   function findSaveButton() {
-    for (const button of document.querySelectorAll("button, [role='button'], input[type='submit']")) {
+    for (const button of root().querySelectorAll("button, [role='button'], input[type='submit']")) {
       if (button.closest(".vl-ui")) continue;
       const text = (button.value || button.textContent || "").trim().toLowerCase();
       if (VL.content.SAVE_WORDS.includes(text) && button.offsetParent !== null) return button;
@@ -32,7 +36,7 @@
   }
 
   function editableFields() {
-    return [...document.querySelectorAll("textarea, input[type='text'], input:not([type])")]
+    return [...root().querySelectorAll("textarea, input[type='text'], input:not([type])")]
       .filter((field) => !field.closest(".vl-ui") && field.offsetParent !== null);
   }
 
@@ -143,6 +147,6 @@
       save.click();
     });
 
-    VL.content.watch(enhance);
+    VL.content.watch(enhance, root());
   });
 })();

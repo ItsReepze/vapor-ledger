@@ -3,16 +3,39 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="light dark">
-  <title>Vapor Ledger test page</title>
-  <link rel="stylesheet" href="../src/app/app.css">
-  <!-- The extension page with made up data instead of Steam. Open it
-       through a local web server from the repository root, for example
-       "npx serve ." and then /test/harness.html. Add ?lang=de for German. -->
+  <title>Account Details</title>
+  <!-- A made up copy of the frame of Steam's account page
+       (store.steampowered.com/account/), with the Vapor Ledger page and made
+       up data instead of Steam. Open it through a local web server from the
+       repository root, for example "npx serve ." and then /test/harness.html.
+       Add ?lang=de for German. Steam's own styles are not part of this copy,
+       the few lines below only stand in for Steam's header and footer. -->
+  <style>
+    body { margin: 0; background: #1b2838; font-family: "Motiva Sans", Arial, sans-serif; }
+    #global_header { background: #171a21; height: 104px; display: flex; align-items: center; gap: 36px; padding: 0 calc(50% - 470px); color: #dcdedf; font-size: 15px; text-transform: uppercase; letter-spacing: 0.04em; }
+    #global_header .logo { font-size: 28px; font-weight: bold; letter-spacing: 0; text-transform: none; color: #c5c3c0; }
+    #global_action_menu { margin-left: auto; font-size: 12px; text-transform: none; color: #b8b6b4; }
+    #store_header { max-width: 940px; margin: 16px auto 0; height: 35px; border-radius: 3px; background: linear-gradient(90deg, rgba(62, 103, 150, 0.92) 11%, rgba(58, 120, 177, 0.8) 25%, rgb(15, 33, 110) 100%); color: #fff; font-size: 13px; display: flex; align-items: center; gap: 28px; padding: 0 16px; }
+    #footer { margin-top: 40px; padding: 24px calc(50% - 470px); background: #171a21; color: #8f98a0; font-size: 12px; }
+  </style>
 </head>
 <body>
+  <div id="global_header">
+    <span class="logo">STEAM</span><span>Store</span><span>Community</span><span>About</span><span>Support</span>
+    <div id="global_action_menu">made_up_user</div>
+  </div>
+  <div id="responsive_page_template_content">
+    <div id="store_header">Your Store &nbsp; New &amp; Noteworthy &nbsp; Categories &nbsp; Points Shop &nbsp; News &nbsp; Labs</div>
+    <div class="page_content_ctn"><div class="page_content"><h2 style="color:#fff">Account details: made_up_user</h2></div></div>
+  </div>
+  <div id="footer">© Valve Corporation. A made up footer for testing.</div>
+  <div id="application_config" data-userinfo='{"steamid":"76561190000000000","country_code":"US"}'
+       data-store_user_config='{"webapi_token":"fake-token"}'></div>
+
   <script src="../src/lib/util.js"></script>
   <script src="../src/lib/i18n.js"></script>
+  <script src="../src/lib/settings.js"></script>
+  <script src="../src/lib/request.js"></script>
   <script src="../src/lib/history.js"></script>
   <script src="../src/lib/steam.js"></script>
   <script src="../src/lib/prices.js"></script>
@@ -22,13 +45,15 @@
   <script src="../src/lib/insights.js"></script>
   <script src="../src/lib/export.js"></script>
   <script src="../src/lib/cache.js"></script>
-  <script src="../src/lib/settings.js"></script>
-  <script src="../src/app/table.js"></script>
-  <script src="../src/app/charts.js"></script>
-  <script src="../src/app/recap.js"></script>
-  <script src="../src/app/views.js"></script>
-  <script src="../src/app/inventory.js"></script>
-  <script src="../src/app/app.js"></script>
+  <script src="../src/lib/sources.js"></script>
+  <script src="../src/ledger/styles.js"></script>
+  <script src="../src/ledger/table.js"></script>
+  <script src="../src/ledger/charts.js"></script>
+  <script src="../src/ledger/views.js"></script>
+  <script src="../src/ledger/recap.js"></script>
+  <script src="../src/ledger/inventory.js"></script>
+  <script src="../src/ledger/settings-view.js"></script>
+  <script src="../src/ledger/page.js"></script>
   <script src="harness.js"></script>
 </body>
 </html>

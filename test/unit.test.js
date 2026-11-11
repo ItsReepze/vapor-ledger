@@ -7,7 +7,7 @@ const path = require("node:path");
 const { load, root } = require("./load.js");
 
 const VL = load(["src/lib/util.js", "src/lib/i18n.js", "src/lib/stats.js", "src/lib/prices.js",
-  "src/lib/insights.js", "src/lib/export.js", "src/app/recap.js"]);
+  "src/lib/insights.js", "src/lib/export.js", "src/ledger/recap.js"]);
 
 const tx = (type, items, amount, extra) =>
   ({ date: Date.UTC(2025, 0, 1), type, typeText: type, items, amount, currency: "€", walletChange: null,
@@ -263,9 +263,9 @@ test("every text the code asks for exists", () => {
       assert.ok(en[key], file + " uses missing text " + key);
     }
   }
-  for (const tab of ["overview", "refunds", "worth", "charts", "inventory", "share", "settings"]) assert.ok(en["tab_" + tab]);
+  for (const tab of ["overview", "spending", "games", "refunds", "inventory", "recap", "settings"]) assert.ok(en["tab_" + tab]);
   for (const type of ["purchase", "gift", "ingame", "refund", "wallet", "market", "other"]) assert.ok(en["htType_" + type]);
-  for (const key of ["headerLink", "profileEdit", "historyTools", "licensesTools"]) {
+  for (const key of ["headerLink", "profileEdit", "historyTools", "licensesTools", "steamdbLinks", "itad"]) {
     assert.ok(en["set_" + key] && en["set_" + key + "_hint"], key);
   }
   for (const b of VL.PLAYTIME_BUCKETS) assert.ok(en["bucket" + b.key.replace(/[^0-9a-z]/gi, "_")], b.key);

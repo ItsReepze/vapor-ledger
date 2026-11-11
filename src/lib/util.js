@@ -1,7 +1,6 @@
 // Small helpers shared by all other files.
-// The extension page loads its scripts with plain <script> tags, so they
-// share one global scope. Every file adds its functions to the global VL
-// object instead of using imports.
+// The scripts of one manifest entry share one global scope. Every file adds
+// its functions to the global VL object instead of using imports.
 
 var VL = globalThis.VL || {};
 globalThis.VL = VL;

@@ -2,23 +2,66 @@
   "manifest_version": 3,
   "name": "__MSG_extName__",
   "short_name": "Vapor Ledger",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "__MSG_extDescription__",
   "default_locale": "en",
-  "permissions": ["storage"],
+  "permissions": [
+    "storage"
+  ],
   "host_permissions": [
     "https://store.steampowered.com/*",
     "https://api.steampowered.com/*",
-    "https://steamcommunity.com/*"
+    "https://steamcommunity.com/*",
+    "https://api.isthereanydeal.com/*"
   ],
   "background": {
     "service_worker": "src/background.js",
-    "scripts": ["src/background.js"]
+    "scripts": [
+      "src/lib/request.js",
+      "src/background.js"
+    ]
   },
   "content_scripts": [
     {
-      "matches": ["https://store.steampowered.com/*", "https://steamcommunity.com/*"],
-      "js": ["src/content/link.js"],
+      "matches": [
+        "https://store.steampowered.com/*",
+        "https://steamcommunity.com/*"
+      ],
+      "js": [
+        "src/content/link.js"
+      ],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://store.steampowered.com/account/",
+        "https://store.steampowered.com/account/?*"
+      ],
+      "js": [
+        "src/lib/util.js",
+        "src/lib/i18n.js",
+        "src/lib/settings.js",
+        "src/lib/request.js",
+        "src/lib/history.js",
+        "src/lib/steam.js",
+        "src/lib/prices.js",
+        "src/lib/community.js",
+        "src/lib/market.js",
+        "src/lib/stats.js",
+        "src/lib/insights.js",
+        "src/lib/export.js",
+        "src/lib/cache.js",
+        "src/lib/sources.js",
+        "src/ledger/styles.js",
+        "src/ledger/table.js",
+        "src/ledger/charts.js",
+        "src/ledger/views.js",
+        "src/ledger/recap.js",
+        "src/ledger/inventory.js",
+        "src/ledger/settings-view.js",
+        "src/ledger/page.js",
+        "src/ledger/start.js"
+      ],
       "run_at": "document_idle"
     },
     {
@@ -33,7 +76,9 @@
         "src/content/common.js",
         "src/content/profile-edit.js"
       ],
-      "css": ["src/content/steam-tools.css"],
+      "css": [
+        "src/content/steam-tools.css"
+      ],
       "run_at": "document_idle"
     },
     {
@@ -50,7 +95,9 @@
         "src/content/history-tools.js",
         "src/content/licenses-tools.js"
       ],
-      "css": ["src/content/steam-tools.css"],
+      "css": [
+        "src/content/steam-tools.css"
+      ],
       "run_at": "document_idle"
     }
   ],
@@ -74,7 +121,9 @@
       "id": "vapor-ledger@reepze.com",
       "strict_min_version": "140.0",
       "data_collection_permissions": {
-        "required": ["none"]
+        "required": [
+          "none"
+        ]
       }
     },
     "gecko_android": {

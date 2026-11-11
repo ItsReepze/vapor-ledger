@@ -12,7 +12,8 @@
 var VL = globalThis.VL || {};
 globalThis.VL = VL;
 
-const HISTORY_PAGE_SIZE = 100;
+// Steam hands out up to 500 history rows per request.
+const HISTORY_PAGE_SIZE = 500;
 const MARKET_DELAY_MS = 3500;
 
 function rowText(row, selector) {
@@ -59,9 +60,7 @@ VL.fetchMarketHistory = async function (known, onProgress, shouldContinue) {
     if (shouldContinue && !shouldContinue()) break;
     if (start > 0) await VL.sleep(MARKET_DELAY_MS);
     const params = new URLSearchParams({ query: "", start: String(start), count: String(HISTORY_PAGE_SIZE) });
-    const response = await fetch("https://steamcommunity.com/market/myhistory/render/?" + params, {
-      credentials: "include",
-    });
+    const response = await VL.request("https://steamcommunity.com/market/myhistory/render/?" + params);
     if (response.status === 429) throw new VL.RateLimitError();
     if (!response.ok) throw new Error("Market history failed: HTTP " + response.status);
     const data = await response.json();

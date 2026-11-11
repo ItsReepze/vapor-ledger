@@ -1,9 +1,11 @@
-// The inventory and market page. Inventory and market data live on
+// The "Inventory and market" tab. Inventory and market data live on
 // steamcommunity.com and Steam limits these requests hard, so they are
-// only loaded when the user asks for them, and prices are kept for a day.
+// only loaded when the user asks for them. Saved data shows at once,
+// prices are kept for a day and only missing or old ones are asked again.
 
 var VL = globalThis.VL || {};
 globalThis.VL = VL;
+VL.views = VL.views || {};
 
 function inventoryGameLabel(appid) {
   const app = VL.INVENTORY_APPS.find((a) => a[0] === appid);
@@ -14,7 +16,7 @@ function errorText(error) {
   return error && error.rateLimited ? VL.t("rateLimited") : VL.t("somethingWrong", error ? error.message : "");
 }
 
-// view: { steamid, onCommunity(data) } from app.js
+// view: { steamid, onCommunity(data) } from page.js
 VL.views.inventory = function (view) {
   const el = VL.el;
   const box = el("div", {}, el("p", { class: "status" }, VL.t("loadingSaved")));
@@ -32,8 +34,8 @@ VL.views.inventory = function (view) {
 
   async function load(force) {
     const cacheId = "community-" + view.steamid;
-    let data = await VL.loadCache(cacheId);
-    if (!data && !force) {
+    const cached = await VL.loadCache(cacheId);
+    if (!cached && !force) {
       box.replaceChildren(
         el("p", {}, VL.t("inventoryIntro")),
         el("button", { type: "button", class: "primary", onclick: () => start(true) }, VL.t("inventoryLoad"))
@@ -41,74 +43,65 @@ VL.views.inventory = function (view) {
       return;
     }
 
+    // Show what is there right away, everything else fills in while it loads.
+    const data = cached || { stacks: [], history: [], historyComplete: false, prices: {}, fetchedAt: Date.now() };
     const notes = [];
+    const progress = el("div", { class: "progress", "aria-live": "polite" });
+    const page = VL.buildCommunityPage(data, progress, notes, () => start(true));
+    box.replaceChildren(page);
+    const say = (...parts) => progress.replaceChildren(...parts);
+    const saved = async () => {
+      page.update();
+      await VL.saveCache(cacheId, data);
+      view.onCommunity && view.onCommunity(data);
+    };
+
+    say(VL.t("loadingStart"));
     const session = await VL.openCommunity();
-    if (!session) {
-      if (!data) {
-        box.replaceChildren(el("p", { class: "status error" }, VL.t("communityLogin")),
-          el("p", {}, el("a", { href: "https://steamcommunity.com/login/", target: "_blank", rel: "noopener" },
-            "steamcommunity.com")));
-        return;
-      }
-      notes.push(VL.t("communityLogin"));
-    } else if (session.steamid !== view.steamid) {
-      box.replaceChildren(el("p", { class: "status error" }, VL.t("communityOtherAccount")));
+    if (!session || session.steamid !== view.steamid) {
+      notes.push(session ? VL.t("communityOtherAccount") : VL.t("communityLogin"));
+      say();
+      page.update();
       return;
     }
 
-    if (force || !data) {
-      const oldPrices = (data && data.prices) || {};
-      data = { stacks: [], history: [], historyComplete: false, prices: oldPrices, fetchedAt: Date.now() };
-      const status = el("p", { class: "status" });
-      box.replaceChildren(status);
+    if (force || !cached) {
       try {
-        data.stacks = await VL.fetchInventories(view.steamid, (label) => {
-          status.textContent = VL.t("loadingInventory", label);
-        });
+        data.stacks = await VL.fetchInventories(view.steamid, (label) => say(VL.t("loadingInventory", label)));
+        data.fetchedAt = Date.now();
       } catch (error) {
         notes.push(errorText(error));
       }
+      await saved();
       try {
-        const result = await VL.fetchMarketHistory([], (done, total) => {
-          status.textContent = VL.t("loadingMarket", done, total);
-        });
+        // Only pages newer than the saved history are loaded.
+        const result = await VL.fetchMarketHistory(data.historyComplete ? data.history : [],
+          (done, total) => say(VL.t("loadingMarket", done, total)));
         data.history = result.entries;
         data.historyComplete = result.complete;
       } catch (error) {
         notes.push(errorText(error));
       }
-      await VL.saveCache(cacheId, data);
+      await saved();
     }
 
-    // Prices load in the background. The page is built once and only its
-    // numbers and rows are updated, so a search the user typed in stays.
-    let stopped = false;
-    const progress = el("div", { class: "progress", "aria-live": "polite" });
-    const page = VL.buildCommunityPage(data, progress, notes, () => start(true));
-    box.replaceChildren(page);
-    view.onCommunity && view.onCommunity(data);
-
-    if (!session) return;
-    const todo = data.stacks.filter((s) => {
-      const p = data.prices[s.appid + "/" + s.hashName];
-      return s.marketable && (!p || Date.now() - p.at > VL.PRICE_MAX_AGE_MS);
-    }).length;
-    if (todo === 0) return;
-
-    const stop = el("button", { type: "button", onclick: () => { stopped = true; } }, VL.t("stop"));
-    try {
-      await VL.fetchPrices(data.stacks, session.currency, data.prices, (done, total) => {
-        const minutes = Math.ceil(((total - done) * 3.5) / 60);
-        progress.replaceChildren(VL.t("loadingPrices", done, total, minutes), " ", done < total ? stop : "");
-        if (done % 10 === 0 || done === total) page.update();
-      }, () => !stopped);
-    } catch (error) {
-      notes.push(errorText(error));
+    // Prices: only missing or older than a day, as few requests as possible.
+    if (VL.stalePrices(data.stacks, data.prices).length > 0) {
+      let stopped = false;
+      const stop = el("button", { type: "button", onclick: () => { stopped = true; } }, VL.t("stop"));
+      try {
+        await VL.fetchPrices(data.stacks, session.currency, data.prices, (done, total) => {
+          const minutes = Math.ceil(((total - done) * VL.PRICE_DELAY_SECONDS) / 60);
+          say(VL.t("loadingPrices", done, total, minutes), " ", done < total ? stop : "");
+          if (done % 5 === 0) page.update();
+          if (done % 20 === 0) VL.saveCache(cacheId, data);
+        }, () => !stopped);
+      } catch (error) {
+        notes.push(errorText(error));
+      }
     }
-    progress.replaceChildren();
-    await VL.saveCache(cacheId, data);
-    page.update();
-    view.onCommunity && view.onCommunity(data);
+    say();
+    await saved();
   }
 
   start(false);
@@ -124,6 +117,7 @@ VL.buildCommunityPage = function (data, progress, notes, reload) {
   const marketMoney = (v) => VL.formatMoney(v, current.market.currency || current.inv.currency);
 
   const tiles = el("div", { class: "tiles" });
+  const dataAge = el("span", { class: "muted" });
   const notesList = el("ul");
 
   const inventoryTable = VL.dataTable([
@@ -158,6 +152,7 @@ VL.buildCommunityPage = function (data, progress, notes, reload) {
   const marketEmpty = el("p", { class: "empty" }, VL.t("marketEmpty"));
 
   function update() {
+    dataAge.textContent = data.stacks.length ? VL.t("dataFrom", new Date(data.fetchedAt).toLocaleString(VL.locale())) : "";
     const inv = VL.buildInventoryStats(data.stacks, data.prices);
     const market = VL.buildMarketStats(data.history);
     current.inv = inv;
@@ -192,7 +187,7 @@ VL.buildCommunityPage = function (data, progress, notes, reload) {
 
   const page = el("div", {},
     el("div", { class: "form-row" },
-      el("span", { class: "muted" }, VL.t("dataFrom", new Date(data.fetchedAt).toLocaleString(VL.locale()))),
+      dataAge,
       el("button", { type: "button", onclick: reload }, VL.t("refreshInventory"))),
     tiles,
     progress,

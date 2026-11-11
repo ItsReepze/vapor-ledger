@@ -1,7 +1,8 @@
-/* Look of Vapor Ledger's additions on Steam's own pages. Colors, fonts,
-   buttons and fields follow Steam's own style, so the additions look like
-   part of the page. Every class starts with "vl-", nothing of Steam's own
-   styles is changed. */
+/* Look of Vapor Ledger's additions on Steam's own pages, in Steam's current
+   style (the same colors, fonts, buttons and fields as Steam's newer pages
+   and the Vapor Ledger page). Every class starts with "vl-" and only our
+   own elements use them, so neither Steam's page nor other extensions are
+   changed. */
 
 .vl-ui, .vl-toolbar {
   font-family: "Motiva Sans", Arial, Helvetica, sans-serif;
@@ -14,44 +15,42 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
-  margin: 0 0 12px;
-  padding: 8px 10px;
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 3px;
+  margin: 0 0 14px;
+  padding: 10px 12px;
+  background: #16202d;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
 }
 
 .vl-search, .vl-select {
   font-family: inherit;
   font-size: 13px;
-  height: 30px;
+  height: 32px;
   padding: 0 10px;
   color: #ffffff;
-  background-color: #222b35;
-  border: 1px solid #000000;
-  border-radius: 3px;
-  box-shadow: 1px 1px 0 rgba(255, 255, 255, 0.15);
+  background-color: #0e141b;
+  border: 1px solid #2a3f5a;
+  border-radius: 2px;
   outline: none;
 }
 .vl-search { flex: 1; min-width: 200px; }
 .vl-search::placeholder { color: #8f98a0; }
-.vl-search:focus, .vl-select:focus { border-color: #66c0f4; }
-.vl-select option { background: #222b35; color: #ffffff; }
+.vl-search:focus, .vl-select:focus { border-color: #1a9fff; }
+.vl-select option { background: #0e141b; color: #ffffff; }
 
 .vl-btn {
   font-family: inherit;
-  font-size: 15px;
-  line-height: 30px;
-  height: 30px;
-  padding: 0 15px;
+  font-size: 14px;
+  height: 32px;
+  padding: 0 16px;
   border: none;
   border-radius: 2px;
   cursor: pointer;
-  color: #67c1f5;
-  background: rgba(103, 193, 245, 0.2);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
 }
 .vl-btn:hover, .vl-btn:focus-visible {
-  color: #ffffff;
-  background: linear-gradient(-60deg, #417a9b 5%, #67c1f5 95%);
+  background: rgba(255, 255, 255, 0.2);
 }
 .vl-btn[hidden] { display: none; }
 

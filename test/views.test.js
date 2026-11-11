@@ -1,4 +1,4 @@
-// Tests for the pages of the extension page, in a small test DOM.
+// Tests for the tabs of the Vapor Ledger page, in a small test DOM.
 // Run with: npm test
 const test = require("node:test");
 const assert = require("node:assert");
@@ -10,9 +10,10 @@ globalThis.document = document;
 globalThis.Node = window.Node;
 globalThis.Event = window.Event;
 
-const VL = load(["src/lib/util.js", "src/lib/i18n.js", "src/lib/community.js", "src/lib/market.js",
-  "src/lib/stats.js", "src/lib/insights.js", "src/lib/export.js", "src/app/table.js", "src/app/charts.js",
-  "src/app/views.js", "src/app/inventory.js"]);
+const VL = load(["src/lib/util.js", "src/lib/i18n.js", "src/lib/settings.js", "src/lib/community.js",
+  "src/lib/market.js", "src/lib/stats.js", "src/lib/insights.js", "src/lib/export.js", "src/lib/sources.js",
+  "src/ledger/table.js", "src/ledger/charts.js", "src/ledger/views.js", "src/ledger/inventory.js",
+  "src/ledger/page.js"]);
 
 function makeCommunity() {
   return {
@@ -88,7 +89,7 @@ function makeView() {
 
 test("every page builds without errors and shows Steam text only as text", () => {
   const view = makeView();
-  for (const key of ["overview", "refunds", "worth", "charts"]) {
+  for (const key of ["overview", "spending", "games", "refunds"]) {
     const node = VL.views[key](view);
     document.body.append(node);
     assert.ok(node.textContent.length > 50, key);
@@ -108,10 +109,27 @@ test("the refund page marks the recent game and links to Steam's help", () => {
   assert.match(node.textContent, /Steam decides every request itself/);
 });
 
-test("the overview keeps other currencies apart", () => {
+test("other currencies are kept apart from the totals", () => {
+  const view = makeView();
+  assert.match(VL.views.spending(view).querySelector(".tile.warn").textContent, /8\.99 \$/);
+  const hero = VL.views.heroFigures(view);
+  assert.match(hero[0].querySelector(".value").textContent, /61\.99 €/);
+  assert.ok(hero.length >= 4 && hero.length <= 5, "three to five key numbers");
+});
+
+test("the overview leads to the refundable game", () => {
   const node = VL.views.overview(makeView());
-  assert.match(node.querySelector(".tile.warn").textContent, /8\.99 \$/);
-  assert.match(node.querySelector(".tile.main .value").textContent, /61\.99 €/);
+  const card = node.querySelector(".highlight.alert");
+  assert.match(card.textContent, /1 games/);
+  assert.strictEqual(card.getAttribute("href"), "#vapor-ledger/refunds");
+});
+
+test("ledger tabs come from the address", () => {
+  assert.strictEqual(VL.ledgerTab("#vapor-ledger"), "overview");
+  assert.strictEqual(VL.ledgerTab("#vapor-ledger/games"), "games");
+  assert.strictEqual(VL.ledgerTab("#vapor-ledger/nonsense"), "overview");
+  assert.strictEqual(VL.ledgerTab("#other"), null);
+  assert.strictEqual(VL.ledgerTab(""), null);
 });
 
 test("charts are SVG with a label, keyboard focus and a table", () => {

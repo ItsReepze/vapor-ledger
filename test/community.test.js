@@ -3,7 +3,7 @@ const test = require("node:test");
 const assert = require("node:assert");
 const { load, html } = require("./load.js");
 
-const VL = load(["src/lib/util.js", "src/lib/i18n.js", "src/lib/history.js", "src/lib/community.js",
+const VL = load(["src/lib/util.js", "src/lib/i18n.js", "src/lib/request.js", "src/lib/history.js", "src/lib/community.js",
   "src/lib/market.js", "src/lib/stats.js"]);
 
 test("getCommunitySession reads steamid and wallet currency from the page", () => {
@@ -146,8 +146,8 @@ test("fetchMarketHistory stops at entries it already knows", async () => {
   globalThis.fetch = async (url) => {
     requests.push(url);
     const start = Number(new URL(url).searchParams.get("start"));
-    const page = pages[start / 100] || "";
-    return new Response(JSON.stringify({ success: true, total_count: 400, results_html: page }));
+    const page = pages[start / 500] || "";
+    return new Response(JSON.stringify({ success: true, total_count: 2000, results_html: page }));
   };
   try {
     const known = [{ id: "r3", action: "bought", name: "A", game: "G", amount: 3, currency: "€", dateText: "" },

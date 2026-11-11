@@ -59,7 +59,7 @@ VL.fetchStorePrices = async function (appids, country, onProgress) {
     };
     const url = "https://api.steampowered.com/IStoreBrowseService/GetItems/v1/?input_json="
       + encodeURIComponent(JSON.stringify(input));
-    const response = await fetch(url);
+    const response = await VL.request(url);
     if (!response.ok) throw new Error("Store prices failed: HTTP " + response.status);
     Object.assign(prices, VL.parseStoreItems(await response.json()));
     onProgress && onProgress(Math.min(start + PRICE_BATCH_SIZE, appids.length), appids.length);

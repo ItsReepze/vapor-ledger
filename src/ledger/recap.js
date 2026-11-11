@@ -4,6 +4,7 @@
 
 var VL = globalThis.VL || {};
 globalThis.VL = VL;
+VL.views = VL.views || {};
 
 const RECAP_W = 1200;
 const RECAP_H = 675;
@@ -125,4 +126,47 @@ VL.saveRecap = function (recap) {
   canvas.toBlob((blob) => {
     if (blob) VL.download("vapor-ledger-" + (recap.year || "all") + ".png", blob);
   }, "image/png");
+};
+
+// ---------- Recap tab: recap image and export ----------
+
+VL.views.recap = function (view) {
+  const el = VL.el;
+  const stats = view.stats;
+  const years = VL.recapYears(stats);
+  const period = el("select", { id: "vl-recap-period", onchange: draw },
+    el("option", { value: "" }, VL.t("periodAll")),
+    years.map((y) => el("option", { value: y }, String(y))));
+  const withGames = el("input", { type: "checkbox", onchange: draw });
+  const canvas = el("canvas", { class: "recap-preview", role: "img" });
+  let recap = null;
+
+  function draw() {
+    recap = VL.recapData(stats, view.data.transactions, period.value ? Number(period.value) : null, withGames.checked);
+    VL.drawRecap(canvas, recap);
+    canvas.setAttribute("aria-label", VL.t("recapPreview") + ": "
+      + VL.recapFigures(recap).map((f) => f[0] + " " + f[1]).join(", "));
+  }
+  draw();
+
+  const stamp = new Date().toISOString().slice(0, 10);
+  const save = (name, text, type) => () => VL.download(name + "-" + stamp + "." + type.split("/")[1], text(), type);
+  return el("div", {},
+    el("h2", {}, VL.t("recapTitle")),
+    el("p", { class: "muted" }, VL.t("recapIntro")),
+    el("div", { class: "form-row" },
+      el("label", { for: "vl-recap-period" }, VL.t("recapPeriod")), period,
+      el("label", { class: "inline" }, withGames, " ", VL.t("recapWithGames")),
+      el("button", { type: "button", class: "primary", onclick: () => VL.saveRecap(recap) }, VL.t("recapSave"))),
+    canvas,
+    el("h2", {}, VL.t("exportTitle")),
+    el("p", { class: "muted" }, VL.t("exportIntro")),
+    el("div", { class: "form-row" },
+      el("button", { type: "button", onclick: save("vapor-ledger-purchases",
+        () => VL.transactionsCsv(view.data.transactions), "text/csv") }, VL.t("exportPurchasesCsv")),
+      el("button", { type: "button", onclick: save("vapor-ledger-games", () => VL.gamesCsv(stats), "text/csv") },
+        VL.t("exportGamesCsv")),
+      el("button", { type: "button", onclick: save("vapor-ledger", () => VL.exportJson(view.data, stats),
+        "application/json") }, VL.t("exportJson")))
+  );
 };

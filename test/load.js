@@ -1,7 +1,7 @@
 // Loads the extension scripts into the test's global scope, the same way
-// the extension page loads them with <script> tags. Texts are the English
-// ones and numbers are formatted as en-US, so the tests don't depend on
-// the computer's language.
+// the browser loads the scripts of one manifest entry. Texts are the
+// English ones and numbers are formatted as en-US, so the tests don't
+// depend on the computer's language.
 const fs = require("node:fs");
 const path = require("node:path");
 const vm = require("node:vm");

@@ -1,6 +1,6 @@
-// Made up data for test/harness.html. It replaces every function that
-// talks to Steam, so the page can be tried and screenshotted without a
-// Steam account. All names, ids and amounts are invented.
+// Made up data for test/harness.html, a copy of Steam's account page.
+// It replaces every function that talks to Steam, so the page can be tried
+// and screenshotted without a Steam account. All names, ids and amounts are invented.
 /* global VL */
 
 (async function () {
@@ -12,7 +12,7 @@
   // Fake chrome.storage, so the cache works outside an extension.
   const store = {};
   window.chrome = { storage: { local: {
-    get: async (key) => ({ [key]: store[key] }),
+    get: async (keys) => Object.fromEntries([].concat(keys).map((key) => [key, store[key]])),
     set: async (obj) => Object.assign(store, obj),
     remove: async (key) => { delete store[key]; },
     clear: async () => { for (const key of Object.keys(store)) delete store[key]; },
@@ -109,5 +109,6 @@
     return known;
   };
 
-  VL.startApp();
+  if (!VL.ledgerTab(location.hash)) location.hash = VL.LEDGER_HASH;
+  VL.startLedger();
 })();
