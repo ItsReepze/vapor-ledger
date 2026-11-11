@@ -26,10 +26,10 @@ Vapor Ledger for Steam
 `store/screenshots/`, 1280x800, made from `test/harness.html` with made up
 data:
 
-1. `1-overview.png` overview with totals and games table
-2. `2-refunds.png` refund watch (German interface)
-3. `3-charts.png` charts
-4. `4-worth.png` best and worst purchases
+1. `1-overview.png` the page inside the Steam store: key numbers and overview
+2. `2-refunds.png` still refundable games (German interface)
+3. `3-spending.png` spending per year and month
+4. `4-games.png` best and worst purchases and the games table
 5. `5-recap.png` recap image and export
 
 ---
@@ -77,12 +77,12 @@ Works in every Steam store language. Purchases in different currencies are shown
 
 Private by design
 - No ads, no tracking, no account, no server of our own.
-- The only site the extension talks to is Steam. Your data stays in your browser.
+- The extension talks to Steam. Optional, only if you switch it on: lowest prices from IsThereAnyDeal with your own key (only app ids are sent). Your data stays in your browser.
 - Nothing is ever bought, sold, traded or refunded for you.
 - Free and open source: https://github.com/ItsReepze/vapor-ledger
 
 How to use
-Log in on store.steampowered.com, then click the Vapor Ledger button in the toolbar or the "Vapor Ledger" link in Steam's header.
+Log in on store.steampowered.com, then choose "Vapor Ledger" in your account menu or click the toolbar button. Vapor Ledger opens as a page inside the Steam store.
 
 Steam limits how fast its pages may be asked, so the first price check of a big inventory takes a few minutes. Prices are kept for a day.
 
@@ -133,12 +133,12 @@ Funktioniert in jeder Steam-Sprache. Käufe in verschiedenen Währungen werden g
 
 Datenschutz von Anfang an
 - Keine Werbung, kein Tracking, kein Konto, kein eigener Server.
-- Die Erweiterung spricht nur mit Steam. Deine Daten bleiben in deinem Browser.
+- Die Erweiterung spricht mit Steam. Optional, nur wenn du es einschaltest: Tiefstpreise von IsThereAnyDeal mit deinem eigenen Schlüssel (gesendet werden nur App-IDs). Deine Daten bleiben in deinem Browser.
 - Es wird nie etwas für dich gekauft, verkauft, gehandelt oder erstattet.
 - Kostenlos und Open Source: https://github.com/ItsReepze/vapor-ledger
 
 So geht's
-Logge dich auf store.steampowered.com ein und klicke dann auf das Vapor-Ledger-Symbol in der Symbolleiste oder auf "Vapor Ledger" oben in der Kopfzeile von Steam.
+Logge dich auf store.steampowered.com ein und wähle dann "Vapor Ledger" in deinem Kontomenü oder klicke auf das Symbol in der Symbolleiste. Vapor Ledger öffnet sich als Seite im Steam-Store.
 
 Steam begrenzt, wie schnell seine Seiten abgefragt werden dürfen. Die erste Preisabfrage eines großen Inventars dauert deshalb ein paar Minuten. Preise werden einen Tag gespeichert.
 

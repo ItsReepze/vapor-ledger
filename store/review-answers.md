@@ -5,8 +5,8 @@
 ### Single purpose
 
 Vapor Ledger shows statistics about the user's own Steam account (spending,
-playtime, refund deadlines, inventory value and market history) on its own
-extension page.
+playtime, refund deadlines, inventory value and market history) on a page inside
+the Steam store (store.steampowered.com/account/#vapor-ledger).
 
 ### Permission justifications
 
@@ -16,11 +16,11 @@ in the browser's local extension storage, so the page opens instantly next
 time and market prices are not requested from Steam again within a day.
 
 **Host permission: https://store.steampowered.com/\***
-The extension page loads the purchase history from
+The Vapor Ledger page loads the purchase history from
 store.steampowered.com/account/history with the user's existing login and
 reads the logged in user's Steam ID and Web API token from that page. A small
-content script adds a "Vapor Ledger" link to the store header that opens the
-extension page.
+content script adds a "Vapor Ledger" entry to the account menu that opens the
+Vapor Ledger page.
 
 **Host permission: https://api.steampowered.com/\***
 Reads the user's owned games and playtime (IPlayerService/GetOwnedGames) and
@@ -28,12 +28,12 @@ the current store prices of those games (IStoreBrowseService/GetItems) from
 Steam's official Web API.
 
 **Host permission: https://steamcommunity.com/\***
-When the user clicks "Load inventory and market", the extension page loads the
+When the user clicks "Load inventory and market", the Vapor Ledger page loads the
 inventory (steamcommunity.com/inventory), market prices
 (steamcommunity.com/market/priceoverview) and market history
 (steamcommunity.com/market/myhistory) with the user's existing login. The
-same content script as on the store adds the "Vapor Ledger" link to the
-header.
+same content script as on the store adds the "Vapor Ledger" entry to the
+account menu.
 
 **Content scripts on single Steam pages**
 On the profile edit pages (steamcommunity.com/id/*/edit,
@@ -42,6 +42,19 @@ content scripts make Steam's own page easier to use: search fields, filters,
 a Save bar that stays in view, character counters. They load nothing, send
 nothing and only click Steam's own buttons when the user asks for it. Each
 one can be switched off in the extension's settings.
+
+**Host permission: https://api.isthereanydeal.com/\***
+Optional and off by default. If the user switches on "Lowest prices from
+IsThereAnyDeal" and enters their own API key, the extension asks
+IsThereAnyDeal's official API for the lowest price of the user's games.
+Only Steam app ids, the store country and the user's key are sent.
+
+**Background script**
+Opens the Vapor Ledger page from the toolbar button. The Vapor Ledger page
+runs on store.steampowered.com, so it passes its requests to
+api.steampowered.com, steamcommunity.com and (if switched on)
+api.isthereanydeal.com to the background script, which only accepts these
+hosts.
 
 **Remote code**
 No. All JavaScript is included in the package. No eval, no remote scripts.

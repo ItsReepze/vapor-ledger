@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.4.0 (2026-11-11)
+
+- Vapor Ledger is now a page inside the Steam store
+  (store.steampowered.com/account/#vapor-ledger) with Steam's header,
+  navigation and footer, opened from the account menu or the toolbar
+  button. The separate extension page is gone
+- New layout: the key numbers on top, then tabs Overview, Spending, Games,
+  Refundable, Inventory and market, Recap and Settings, details behind
+  "Show more"
+- Current Steam look for the page and for the improved Steam pages
+- Inventory and market load much faster: cards, backgrounds and emoticons
+  of a game in one request, market history in pages of 500, saved data
+  shows at once, only missing or old prices are asked again. For a
+  typical inventory 85 instead of 260 price requests
+- Optional price sources: lowest price ever from IsThereAnyDeal (own API
+  key, off by default) and links to SteamDB
+- All requests go through one place; requests to other hosts than the
+  store are passed on by the background script
+- Works next to Augmented Steam, the SteamDB extension, Steam Inventory
+  Helper and CSFloat: own vl- classes, shadow root, watchers limited to
+  Steam's page part
+- New host permission: api.isthereanydeal.com
+
 ## 0.3.0 (2026-11-11)
 
 - Own extension page instead of an overlay on Steam. It opens from the

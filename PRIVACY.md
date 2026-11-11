@@ -1,6 +1,6 @@
 # Privacy Policy for Vapor Ledger
 
-Last updated: November 11, 2026
+Last updated: November 11, 2026 (version 0.4.0)
 
 Vapor Ledger is a free browser extension that shows statistics about your own
 Steam account. It is made by an individual developer (ItsReepze) and is not
@@ -9,7 +9,8 @@ affiliated with Valve or Steam.
 ## Short version
 
 - Vapor Ledger does not collect, sell or share any data.
-- There is no Vapor Ledger server. The extension only talks to Steam.
+- There is no Vapor Ledger server. The extension talks to Steam, and to
+  IsThereAnyDeal only if you switch that on (see below).
 - Everything it loads is stored in your browser and nowhere else.
 - No analytics, no tracking, no ads, no third party services.
 
@@ -54,6 +55,19 @@ image, you decide where.
 The export buttons save your purchase history and games as CSV or JSON files
 on your computer. They contain no Steam ID and no token.
 
+## Optional price sources
+
+Both are off until you switch them on in the settings.
+
+- IsThereAnyDeal (api.isthereanydeal.com): with your own API key, Vapor
+  Ledger asks for the lowest price each of your games ever had. Sent are
+  only the Steam app ids of your games, your store country and your key.
+  Never your Steam ID, your Steam token, your name or anything from your
+  purchase history. IsThereAnyDeal's own privacy policy applies to these
+  requests. The key is kept in your browser's extension storage.
+- SteamDB: only links. Nothing is loaded from SteamDB and nothing is sent
+  to it unless you click a link.
+
 ## Refunds
 
 The refund page only shows which purchases may still be refundable and links
@@ -64,7 +78,7 @@ to Steam's own help page. Vapor Ledger never sends a refund request.
 - It never buys, sells, lists, trades or refunds anything on your behalf.
 - It never changes your Steam account or settings.
 - It never reads pages other than Steam's. On Steam's pages it adds the
-  "Vapor Ledger" link to the header and, on the profile edit, purchase
+  "Vapor Ledger" entry to the account menu and, on the profile edit, purchase
   history and licenses pages, search fields and other helpers. These only
   work inside the page you have open: they load nothing, send nothing and
   save through Steam's own buttons only when you click them (or press
@@ -84,9 +98,10 @@ browser's extension settings.
 | Permission | Why |
 |---|---|
 | `storage` | to keep the loaded data and your settings in your browser, so the page opens instantly |
-| store.steampowered.com | to read your purchase history and who is logged in, and to add the "Vapor Ledger" link to the header |
+| store.steampowered.com | to read your purchase history and who is logged in, to show the Vapor Ledger page on your account page, and to add the "Vapor Ledger" entry to the account menu |
 | api.steampowered.com | to read your games, playtime and current store prices from Steam's official API |
-| steamcommunity.com | to read your inventory, market prices and market history, and to add the "Vapor Ledger" link to the header |
+| steamcommunity.com | to read your inventory, market prices and market history, and to add the "Vapor Ledger" entry to the account menu |
+| api.isthereanydeal.com | only if you switch on IsThereAnyDeal: to ask for the lowest prices of your games |
 
 ## Children
 
