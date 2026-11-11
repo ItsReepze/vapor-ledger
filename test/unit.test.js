@@ -259,10 +259,14 @@ test("every text the code asks for exists", () => {
   for (const file of files) {
     const source = fs.readFileSync(path.join(root, file), "utf8");
     for (const [, key] of source.matchAll(/VL\.t\("([A-Za-z0-9_]+)"/g)) {
-      if (key === "tab_" || key === "bucket") continue; // built from a list, checked below
+      if (["tab_", "bucket", "set_", "htType_"].includes(key)) continue; // built from a list, checked below
       assert.ok(en[key], file + " uses missing text " + key);
     }
   }
-  for (const tab of ["overview", "refunds", "worth", "charts", "inventory", "share"]) assert.ok(en["tab_" + tab]);
+  for (const tab of ["overview", "refunds", "worth", "charts", "inventory", "share", "settings"]) assert.ok(en["tab_" + tab]);
+  for (const type of ["purchase", "gift", "ingame", "refund", "wallet", "market", "other"]) assert.ok(en["htType_" + type]);
+  for (const key of ["headerLink", "profileEdit", "historyTools", "licensesTools"]) {
+    assert.ok(en["set_" + key] && en["set_" + key + "_hint"], key);
+  }
   for (const b of VL.PLAYTIME_BUCKETS) assert.ok(en["bucket" + b.key.replace(/[^0-9a-z]/gi, "_")], b.key);
 });

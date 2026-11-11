@@ -341,3 +341,30 @@ VL.views.share = function (view) {
     )
   );
 };
+
+// ---------- Settings ----------
+
+VL.views.settings = function () {
+  const el = VL.el;
+  const list = el("div", { class: "settings" }, el("p", { class: "status" }, VL.t("loadingSaved")));
+  VL.loadSettings().then((settings) => {
+    list.replaceChildren(...VL.FEATURES.map((feature) => {
+      const id = "set-" + feature.key;
+      const box = el("input", { type: "checkbox", id, checked: settings[feature.key],
+        onchange: (e) => VL.saveSetting(feature.key, e.target.checked) });
+      return el("div", { class: "setting" },
+        box,
+        el("label", { for: id },
+          el("span", { class: "setting-name" }, VL.t("set_" + feature.key)),
+          el("span", { class: "setting-hint" }, VL.t("set_" + feature.key + "_hint")),
+          el("span", { class: "setting-pages" }, feature.pages))
+      );
+    }));
+  });
+  return el("div", {},
+    VL.section(VL.t("settingsTitle"),
+      el("p", { class: "muted" }, VL.t("settingsIntro")),
+      list,
+      el("p", { class: "muted" }, VL.t("settingsReload")))
+  );
+};

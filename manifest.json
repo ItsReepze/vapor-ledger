@@ -20,6 +20,38 @@
       "matches": ["https://store.steampowered.com/*", "https://steamcommunity.com/*"],
       "js": ["src/content/link.js"],
       "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://steamcommunity.com/id/*/edit*",
+        "https://steamcommunity.com/profiles/*/edit*"
+      ],
+      "js": [
+        "src/lib/util.js",
+        "src/lib/i18n.js",
+        "src/lib/settings.js",
+        "src/content/common.js",
+        "src/content/profile-edit.js"
+      ],
+      "css": ["src/content/steam-tools.css"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://store.steampowered.com/account/history*",
+        "https://store.steampowered.com/account/licenses*"
+      ],
+      "js": [
+        "src/lib/util.js",
+        "src/lib/i18n.js",
+        "src/lib/settings.js",
+        "src/lib/history.js",
+        "src/content/common.js",
+        "src/content/history-tools.js",
+        "src/content/licenses-tools.js"
+      ],
+      "css": ["src/content/steam-tools.css"],
+      "run_at": "document_idle"
     }
   ],
   "action": {

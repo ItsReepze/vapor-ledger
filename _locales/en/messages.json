@@ -610,5 +610,110 @@
   },
   "noteNothingSold": {
     "message": "Nothing is sold or listed automatically. All data stays in your browser."
+  },
+  "tab_settings": {
+    "message": "Settings"
+  },
+  "settingsTitle": {
+    "message": "Improvements on Steam's pages"
+  },
+  "settingsIntro": {
+    "message": "Vapor Ledger can make some of Steam's own pages easier to use. It only changes how they look and work in this browser. Saving and everything else still goes through Steam's own buttons. Each improvement can be switched off."
+  },
+  "settingsReload": {
+    "message": "Changes apply the next time a Steam page is opened or reloaded."
+  },
+  "set_headerLink": {
+    "message": "Vapor Ledger link in Steam's header"
+  },
+  "set_headerLink_hint": {
+    "message": "A link next to your account menu that opens this page."
+  },
+  "set_profileEdit": {
+    "message": "Better profile editing"
+  },
+  "set_profileEdit_hint": {
+    "message": "Steam's Save button stays in view, Ctrl+S saves, a warning before leaving with unsaved changes, character counters and a preview of your custom URL."
+  },
+  "set_historyTools": {
+    "message": "Search in the purchase history"
+  },
+  "set_historyTools_hint": {
+    "message": "A search field, a type filter and \"Load all\", which clicks Steam's own \"Load more\" button for you, one page after another."
+  },
+  "set_licensesTools": {
+    "message": "Search in licenses"
+  },
+  "set_licensesTools_hint": {
+    "message": "A search field and a year filter for the long list of licenses and product keys."
+  },
+  "peUnsaved": {
+    "message": "Unsaved changes"
+  },
+  "peCounter": {
+    "message": "{0} characters"
+  },
+  "peCounterMax": {
+    "message": "{0} / {1} characters"
+  },
+  "peUrlEmpty": {
+    "message": "Without a custom URL your profile address uses your Steam ID."
+  },
+  "peUrlPreview": {
+    "message": "Your profile address:"
+  },
+  "peUrlRules": {
+    "message": "Steam usually allows 3 to 32 letters, digits, _ and -."
+  },
+  "htSearch": {
+    "message": "Search purchases, items, payment methods"
+  },
+  "htType": {
+    "message": "Type"
+  },
+  "htAllTypes": {
+    "message": "All types"
+  },
+  "htType_purchase": {
+    "message": "Purchases"
+  },
+  "htType_gift": {
+    "message": "Gifts"
+  },
+  "htType_ingame": {
+    "message": "In-game purchases"
+  },
+  "htType_refund": {
+    "message": "Refunds"
+  },
+  "htType_wallet": {
+    "message": "Wallet top-ups"
+  },
+  "htType_market": {
+    "message": "Market"
+  },
+  "htType_other": {
+    "message": "Other"
+  },
+  "htLoadAll": {
+    "message": "Load all"
+  },
+  "htStop": {
+    "message": "Stop loading"
+  },
+  "htCount": {
+    "message": "{0} of {1} entries"
+  },
+  "lcSearch": {
+    "message": "Search licenses"
+  },
+  "lcYear": {
+    "message": "Year"
+  },
+  "lcAllYears": {
+    "message": "All years"
+  },
+  "lcCount": {
+    "message": "{0} of {1} licenses"
   }
 }

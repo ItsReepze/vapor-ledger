@@ -1,0 +1,89 @@
+/* Look of Vapor Ledger's additions on Steam's own pages. Colors, fonts,
+   buttons and fields follow Steam's own style, so the additions look like
+   part of the page. Every class starts with "vl-", nothing of Steam's own
+   styles is changed. */
+
+.vl-ui, .vl-toolbar {
+  font-family: "Motiva Sans", Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  color: #8f98a0;
+}
+
+.vl-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px;
+  padding: 8px 10px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.vl-search, .vl-select {
+  font-family: inherit;
+  font-size: 13px;
+  height: 30px;
+  padding: 0 10px;
+  color: #ffffff;
+  background-color: #222b35;
+  border: 1px solid #000000;
+  border-radius: 3px;
+  box-shadow: 1px 1px 0 rgba(255, 255, 255, 0.15);
+  outline: none;
+}
+.vl-search { flex: 1; min-width: 200px; }
+.vl-search::placeholder { color: #8f98a0; }
+.vl-search:focus, .vl-select:focus { border-color: #66c0f4; }
+.vl-select option { background: #222b35; color: #ffffff; }
+
+.vl-btn {
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 30px;
+  height: 30px;
+  padding: 0 15px;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  color: #67c1f5;
+  background: rgba(103, 193, 245, 0.2);
+}
+.vl-btn:hover, .vl-btn:focus-visible {
+  color: #ffffff;
+  background: linear-gradient(-60deg, #417a9b 5%, #67c1f5 95%);
+}
+.vl-btn[hidden] { display: none; }
+
+.vl-count { margin-left: auto; white-space: nowrap; }
+.vl-hidden { display: none !important; }
+
+/* Profile edit: Steam's own Save and Cancel bar stays in view. */
+.vl-sticky-save {
+  position: sticky !important;
+  bottom: 0;
+  z-index: 50;
+  background: rgba(23, 26, 33, 0.96);
+  box-shadow: 0 -6px 12px rgba(0, 0, 0, 0.45);
+  padding-top: 12px !important;
+  padding-bottom: 12px !important;
+}
+.vl-unsaved {
+  margin-right: auto;
+  align-self: center;
+  color: #e5b54a;
+  font-size: 13px;
+  padding: 0 12px;
+}
+.vl-unsaved[hidden] { display: none; }
+
+.vl-counter, .vl-url-preview {
+  margin: 4px 0 8px;
+  font-size: 12px;
+  color: #8f98a0;
+  text-align: right;
+}
+.vl-counter-full { color: #e5b54a; }
+.vl-url-preview { text-align: left; }
+.vl-url { color: #66c0f4; word-break: break-all; }
+.vl-warn { color: #e5b54a; margin-top: 2px; }

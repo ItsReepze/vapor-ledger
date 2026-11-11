@@ -610,5 +610,110 @@
   },
   "noteNothingSold": {
     "message": "Es wird nichts automatisch verkauft oder eingestellt. Alle Daten bleiben in deinem Browser."
+  },
+  "tab_settings": {
+    "message": "Einstellungen"
+  },
+  "settingsTitle": {
+    "message": "Verbesserungen auf Steams Seiten"
+  },
+  "settingsIntro": {
+    "message": "Vapor Ledger kann einige Seiten von Steam selbst leichter bedienbar machen. Es ändert nur, wie sie in diesem Browser aussehen und sich bedienen lassen. Speichern und alles andere läuft weiter über Steams eigene Knöpfe. Jede Verbesserung lässt sich abschalten."
+  },
+  "settingsReload": {
+    "message": "Änderungen gelten, sobald eine Steam-Seite neu geöffnet oder neu geladen wird."
+  },
+  "set_headerLink": {
+    "message": "Vapor-Ledger-Link in der Kopfzeile von Steam"
+  },
+  "set_headerLink_hint": {
+    "message": "Ein Link neben deinem Kontomenü, der diese Seite öffnet."
+  },
+  "set_profileEdit": {
+    "message": "Bessere Profilbearbeitung"
+  },
+  "set_profileEdit_hint": {
+    "message": "Steams Speichern-Knopf bleibt sichtbar, Strg+S speichert, eine Warnung vor dem Verlassen mit ungespeicherten Änderungen, Zeichenzähler und eine Vorschau deiner eigenen URL."
+  },
+  "set_historyTools": {
+    "message": "Suche in der Kaufhistorie"
+  },
+  "set_historyTools_hint": {
+    "message": "Ein Suchfeld, ein Filter nach Art und \"Alles laden\", das Steams eigenen Knopf \"Mehr laden\" für dich klickt, eine Seite nach der anderen."
+  },
+  "set_licensesTools": {
+    "message": "Suche in den Lizenzen"
+  },
+  "set_licensesTools_hint": {
+    "message": "Ein Suchfeld und ein Filter nach Jahr für die lange Liste der Lizenzen und Produktschlüssel."
+  },
+  "peUnsaved": {
+    "message": "Ungespeicherte Änderungen"
+  },
+  "peCounter": {
+    "message": "{0} Zeichen"
+  },
+  "peCounterMax": {
+    "message": "{0} / {1} Zeichen"
+  },
+  "peUrlEmpty": {
+    "message": "Ohne eigene URL nutzt deine Profiladresse deine Steam-ID."
+  },
+  "peUrlPreview": {
+    "message": "Deine Profiladresse:"
+  },
+  "peUrlRules": {
+    "message": "Steam erlaubt in der Regel 3 bis 32 Buchstaben, Ziffern, _ und -."
+  },
+  "htSearch": {
+    "message": "Käufe, Artikel, Zahlungsarten suchen"
+  },
+  "htType": {
+    "message": "Art"
+  },
+  "htAllTypes": {
+    "message": "Alle Arten"
+  },
+  "htType_purchase": {
+    "message": "Käufe"
+  },
+  "htType_gift": {
+    "message": "Geschenke"
+  },
+  "htType_ingame": {
+    "message": "In-Game-Käufe"
+  },
+  "htType_refund": {
+    "message": "Erstattungen"
+  },
+  "htType_wallet": {
+    "message": "Guthaben aufgeladen"
+  },
+  "htType_market": {
+    "message": "Markt"
+  },
+  "htType_other": {
+    "message": "Andere"
+  },
+  "htLoadAll": {
+    "message": "Alles laden"
+  },
+  "htStop": {
+    "message": "Laden anhalten"
+  },
+  "htCount": {
+    "message": "{0} von {1} Einträgen"
+  },
+  "lcSearch": {
+    "message": "Lizenzen suchen"
+  },
+  "lcYear": {
+    "message": "Jahr"
+  },
+  "lcAllYears": {
+    "message": "Alle Jahre"
+  },
+  "lcCount": {
+    "message": "{0} von {1} Lizenzen"
   }
 }

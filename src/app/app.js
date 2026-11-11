@@ -5,7 +5,9 @@
 var VL = globalThis.VL || {};
 globalThis.VL = VL;
 
-const TABS = ["overview", "refunds", "worth", "charts", "inventory", "share"];
+const TABS = ["overview", "refunds", "worth", "charts", "inventory", "share", "settings"];
+// Tabs that work without data from Steam.
+const OFFLINE_TABS = ["settings"];
 
 VL.startApp = function () {
   const el = VL.el;
@@ -43,11 +45,13 @@ VL.startApp = function () {
   );
 
   function showStatus(text, isError) {
+    if (OFFLINE_TABS.includes(app.tab)) return;
     main.setAttribute("role", "tabpanel");
     main.replaceChildren(el("p", { class: "status" + (isError ? " error" : ""), role: "status" }, text));
   }
 
   function showLogin() {
+    if (OFFLINE_TABS.includes(app.tab)) return;
     main.replaceChildren(el("div", { class: "callout" },
       el("h2", {}, VL.t("loginTitle")),
       el("p", {}, VL.t("loginText")),
@@ -67,7 +71,14 @@ VL.startApp = function () {
       b.tabIndex = selected ? 0 : -1;
     });
     main.setAttribute("aria-labelledby", "tab-" + key);
-    if (!app.stats) return;
+    if (OFFLINE_TABS.includes(key)) {
+      main.replaceChildren(VL.views[key]());
+      return;
+    }
+    if (!app.stats) {
+      main.replaceChildren(el("p", { class: "status", role: "status" }, VL.t(app.busy ? "loadingStart" : "loadingSaved")));
+      return;
+    }
     const view = {
       data: app.data,
       stats: app.stats,

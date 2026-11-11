@@ -35,10 +35,21 @@ test("permissions stay minimal", () => {
   }
 });
 
-test("only the small header link runs on Steam's pages", () => {
-  assert.deepStrictEqual(contentScripts, ["src/content/link.js"]);
-  const source = fs.readFileSync(path.join(root, "src/content/link.js"), "utf8");
-  assert.doesNotMatch(source, /fetch\(|XMLHttpRequest|document\.cookie|chrome\.storage/);
+test("on all Steam pages only the small header link runs", () => {
+  const everywhere = manifest.content_scripts.filter((c) => c.matches.some((m) => /\.com\/\*$/.test(m)));
+  assert.deepStrictEqual(everywhere.flatMap((c) => c.js), ["src/content/link.js"]);
+  // The other scripts only run on the pages they improve.
+  for (const entry of manifest.content_scripts) {
+    if (entry === everywhere[0]) continue;
+    for (const match of entry.matches) assert.match(match, /\/(edit|account\/history|account\/licenses)\*$/);
+  }
+});
+
+test("scripts on Steam's pages never load anything or read cookies", () => {
+  for (const file of new Set(contentScripts)) {
+    const source = fs.readFileSync(path.join(root, file), "utf8");
+    assert.doesNotMatch(source, /fetch\(|XMLHttpRequest|document\.cookie|sendBeacon|\.submit\(/, file);
+  }
 });
 
 test("all files referenced by the manifest and the page exist", () => {
@@ -49,6 +60,7 @@ test("all files referenced by the manifest and the page exist", () => {
     ...Object.values(manifest.icons),
     ...Object.values(manifest.action.default_icon),
     ...appScripts,
+    ...manifest.content_scripts.flatMap((c) => c.css || []),
     "src/app/app.css",
   ];
   for (const file of files) {
@@ -74,7 +86,7 @@ test("the page scripts don't declare the same top level name twice", () => {
   // All scripts of the page run in one shared scope. Two top level "const x"
   // in different files would stop the second file with a SyntaxError.
   // "var VL" is the one name every file is allowed to repeat.
-  for (const list of [appScripts, contentScripts]) {
+  for (const list of [appScripts, ...manifest.content_scripts.map((c) => c.js)]) {
     const seen = new Map();
     for (const file of list) {
       const source = fs.readFileSync(path.join(root, file), "utf8");
