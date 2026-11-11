@@ -35,8 +35,12 @@ test("the package contains everything the manifest needs and nothing else", () =
   const needed = [
     "manifest.json",
     ...manifest.content_scripts.flatMap((c) => c.js),
-    manifest.action.default_popup,
-    "src/popup/popup.js",
+    manifest.background.service_worker,
+    "src/app/app.html",
+    "src/app/app.css",
+    "src/app/start.js",
+    "_locales/en/messages.json",
+    "_locales/de/messages.json",
     ...Object.values(manifest.icons),
   ];
   for (const file of needed) assert.ok(files.includes(file), file + " is missing");

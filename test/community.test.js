@@ -1,19 +1,10 @@
 // Tests for inventory, prices and market history. Run with: npm test
 const test = require("node:test");
 const assert = require("node:assert");
-const fs = require("node:fs");
-const path = require("node:path");
-const vm = require("node:vm");
-const { parseHTML } = require("linkedom");
+const { load, html } = require("./load.js");
 
-for (const file of ["src/lib/util.js", "src/lib/history.js", "src/lib/community.js", "src/lib/market.js", "src/lib/stats.js"]) {
-  vm.runInThisContext(fs.readFileSync(path.join(__dirname, "..", file), "utf8"));
-}
-const VL = globalThis.VL;
-
-function html(body) {
-  return parseHTML("<!doctype html><html><body>" + body + "</body></html>").document;
-}
+const VL = load(["src/lib/util.js", "src/lib/i18n.js", "src/lib/history.js", "src/lib/community.js",
+  "src/lib/market.js", "src/lib/stats.js"]);
 
 test("getCommunitySession reads steamid and wallet currency from the page", () => {
   const doc = html(`

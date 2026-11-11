@@ -1,38 +1,29 @@
 {
   "manifest_version": 3,
-  "name": "Vapor Ledger for Steam",
+  "name": "__MSG_extName__",
   "short_name": "Vapor Ledger",
-  "version": "0.2.0",
-  "description": "Free Steam stats: spending, playtime, pile of shame, inventory value and market profit. No ads, no tracking, data stays local.",
+  "version": "0.3.0",
+  "description": "__MSG_extDescription__",
+  "default_locale": "en",
   "permissions": ["storage"],
   "host_permissions": [
     "https://store.steampowered.com/*",
-    "https://api.steampowered.com/*"
+    "https://api.steampowered.com/*",
+    "https://steamcommunity.com/*"
   ],
+  "background": {
+    "service_worker": "src/background.js",
+    "scripts": ["src/background.js"]
+  },
   "content_scripts": [
     {
       "matches": ["https://store.steampowered.com/*", "https://steamcommunity.com/*"],
-      "js": [
-        "src/lib/util.js",
-        "src/lib/history.js",
-        "src/lib/steam.js",
-        "src/lib/prices.js",
-        "src/lib/community.js",
-        "src/lib/market.js",
-        "src/lib/stats.js",
-        "src/lib/cache.js",
-        "src/content/styles.js",
-        "src/content/share.js",
-        "src/content/market-view.js",
-        "src/content/dashboard.js",
-        "src/content/main.js"
-      ],
+      "js": ["src/content/link.js"],
       "run_at": "document_idle"
     }
   ],
   "action": {
     "default_title": "Vapor Ledger",
-    "default_popup": "src/popup/popup.html",
     "default_icon": {
       "16": "icons/icon16.png",
       "32": "icons/icon32.png",

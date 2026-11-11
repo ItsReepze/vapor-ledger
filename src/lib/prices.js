@@ -12,8 +12,8 @@ const PRICE_BATCH_SIZE = 100;
 const PRICE_DELAY_MS = 500;
 
 // Turns one GetItems answer into { appid: price }.
-// price is { cents, formatted, discount } for games on sale today,
-// { cents: 0, free: true } for free games. Games that are not sold any
+// price is { cents, regular, formatted, discount } for games on sale today,
+// { cents: 0, regular: 0, free: true } for free games. Games that are not sold any
 // more (removed from the store, or only sold in a bundle) are left out.
 VL.parseStoreItems = function (data) {
   const prices = {};
@@ -21,17 +21,24 @@ VL.parseStoreItems = function (data) {
   for (const item of items) {
     if (!item || !item.appid || item.success !== 1) continue;
     if (item.is_free) {
-      prices[item.appid] = { cents: 0, formatted: "", discount: 0, free: true };
+      prices[item.appid] = { cents: 0, regular: 0, formatted: "", discount: 0, free: true };
       continue;
     }
     const option = item.best_purchase_option;
     if (!option || option.final_price_in_cents === undefined) continue;
     const cents = Number(option.final_price_in_cents);
     if (!Number.isFinite(cents)) continue;
+    // The regular price is the price without today's discount.
+    const original = Number(option.original_price_in_cents);
+    const discount = option.discount_pct || 0;
+    let regular = cents;
+    if (Number.isFinite(original) && original > cents) regular = original;
+    else if (discount > 0 && discount < 100) regular = Math.round(cents / (1 - discount / 100));
     prices[item.appid] = {
       cents,
+      regular,
       formatted: option.formatted_final_price || "",
-      discount: option.discount_pct || 0,
+      discount,
       free: false,
     };
   }

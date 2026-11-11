@@ -1,0 +1,33 @@
+<!-- Made up rows in more Steam languages and currencies, as they appear in
+     /account/history/ or in the "html" part of AjaxLoadMoreHistory.
+     Every row has data-expect="type|amount|currency|yyyy-mm-dd" for the test.
+     All names and amounts are invented. -->
+<table><tbody>
+<!-- French, euro -->
+<tr class="wallet_table_row" data-expect="purchase|24.99|€|2026-11-04"><td class="wht_date">4 nov. 2026</td><td class="wht_items"><div>Lantern Keeper</div><div class="wth_payment">Visa</div></td><td class="wht_type"><div>Achat</div><div class="wth_payment">Visa</div></td><td class="wht_total">24,99€</td><td class="wht_wallet_change wallet_column"></td></tr>
+<tr class="wallet_table_row" data-expect="gift|9.99|€|2026-02-01"><td class="wht_date">1 févr. 2026</td><td class="wht_items"><div>Orbit Garden</div></td><td class="wht_type"><div>Achat d'un cadeau</div><div class="wth_payment">PayPal</div></td><td class="wht_total">9,99€</td><td class="wht_wallet_change wallet_column"></td></tr>
+<tr class="wallet_table_row" data-expect="refund|24.99|€|2026-11-05"><td class="wht_date">5 nov. 2026</td><td class="wht_items"><div>Lantern Keeper</div></td><td class="wht_type"><div>Remboursement</div></td><td class="wht_total">24,99€</td><td class="wht_wallet_change wallet_column">+24,99€</td></tr>
+<!-- Russian, rouble -->
+<tr class="wallet_table_row" data-expect="purchase|1299|pуб|2026-11-04"><td class="wht_date">4 нояб. 2026 г.</td><td class="wht_items"><div>Lantern Keeper</div></td><td class="wht_type"><div>Покупка</div><div class="wth_payment">Кошелёк Steam</div></td><td class="wht_total">1 299 pуб.</td><td class="wht_wallet_change wallet_column">-1 299 pуб.</td></tr>
+<tr class="wallet_table_row" data-expect="ingame|149.5|pуб|2026-03-08"><td class="wht_date">8 мар. 2026 г.</td><td class="wht_items"><div>Dust Raiders</div></td><td class="wht_type"><div>Покупка в игре</div></td><td class="wht_total">149,50 pуб.</td><td class="wht_wallet_change wallet_column"></td></tr>
+<tr class="wallet_table_row" data-expect="market|30|pуб|2026-01-15"><td class="wht_date">15 янв. 2026 г.</td><td class="wht_items"><div>Торговая площадка сообщества Steam</div></td><td class="wht_type"><div>Операция на Торговой площадке</div></td><td class="wht_total"></td><td class="wht_wallet_change wallet_column">+30 pуб.</td></tr>
+<!-- Japanese, yen -->
+<tr class="wallet_table_row" data-expect="purchase|1980|¥|2026-11-04"><td class="wht_date">2026年11月4日</td><td class="wht_items"><div>Lantern Keeper</div></td><td class="wht_type"><div>購入</div><div class="wth_payment">クレジットカード</div></td><td class="wht_total">¥ 1,980</td><td class="wht_wallet_change wallet_column"></td></tr>
+<tr class="wallet_table_row" data-expect="wallet|2000|¥|2025-12-24"><td class="wht_date">2025年12月24日</td><td class="wht_items"><div>¥ 2,000 ウォレットクレジット</div></td><td class="wht_type"><div>購入</div></td><td class="wht_total">¥ 2,000</td><td class="wht_wallet_change wallet_column">+¥ 2,000</td></tr>
+<!-- Polish, złoty -->
+<tr class="wallet_table_row" data-expect="purchase|71.99|zł|2026-10-31"><td class="wht_date">31 paź 2026</td><td class="wht_items"><div>Hollow Pines</div></td><td class="wht_type"><div>Zakup</div><div class="wth_payment">BLIK</div></td><td class="wht_total">71,99zł</td><td class="wht_wallet_change wallet_column"></td></tr>
+<tr class="wallet_table_row" data-expect="refund|71.99|zł|2026-11-01"><td class="wht_date">1 lis 2026</td><td class="wht_items"><div>Hollow Pines</div></td><td class="wht_type"><div>Zwrot pieniędzy</div></td><td class="wht_total">71,99zł</td><td class="wht_wallet_change wallet_column"></td></tr>
+<!-- Brazilian Portuguese, real -->
+<tr class="wallet_table_row" data-expect="purchase|59.99|R$|2026-09-07"><td class="wht_date">7 de set. de 2026</td><td class="wht_items"><div>Orbit Garden</div></td><td class="wht_type"><div>Compra</div><div class="wth_payment">Pix</div></td><td class="wht_total">R$ 59,99</td><td class="wht_wallet_change wallet_column"></td></tr>
+<tr class="wallet_table_row" data-expect="ingame|10|R$|2026-05-20"><td class="wht_date">20 de mai. de 2026</td><td class="wht_items"><div>Dust Raiders</div></td><td class="wht_type"><div>Compra no jogo</div></td><td class="wht_total">R$ 10,00</td><td class="wht_wallet_change wallet_column"></td></tr>
+<!-- Simplified Chinese, yuan -->
+<tr class="wallet_table_row" data-expect="purchase|68|¥|2026-04-02"><td class="wht_date">2026 年 4 月 2 日</td><td class="wht_items"><div>Ember Tactics</div></td><td class="wht_type"><div>购买</div><div class="wth_payment">支付宝</div></td><td class="wht_total">¥ 68.00</td><td class="wht_wallet_change wallet_column"></td></tr>
+<!-- Korean, won -->
+<tr class="wallet_table_row" data-expect="gift|21500|₩|2026-06-30"><td class="wht_date">2026년 6월 30일</td><td class="wht_items"><div>Orbit Garden</div></td><td class="wht_type"><div>선물 구매</div></td><td class="wht_total">₩ 21,500</td><td class="wht_wallet_change wallet_column"></td></tr>
+<!-- Turkish (now US dollar) -->
+<tr class="wallet_table_row" data-expect="refund|4.99|$USD|2026-08-12"><td class="wht_date">12 Ağu 2026</td><td class="wht_items"><div>Dust Raiders</div></td><td class="wht_type"><div>İade</div></td><td class="wht_total">$4.99 USD</td><td class="wht_wallet_change wallet_column"></td></tr>
+<!-- Spanish, euro -->
+<tr class="wallet_table_row" data-expect="market|0.42|€|2026-02-14"><td class="wht_date">14 FEB 2026</td><td class="wht_items"><div>Mercado de la Comunidad de Steam</div></td><td class="wht_type"><div>Transacción del Mercado</div></td><td class="wht_total"></td><td class="wht_wallet_change wallet_column">-0,42€</td></tr>
+<!-- Vietnamese, dong -->
+<tr class="wallet_table_row" data-expect="purchase|165000|₫|2026-11-04"><td class="wht_date">4 thg 11, 2026</td><td class="wht_items"><div>Lantern Keeper</div></td><td class="wht_type"><div>Mua</div></td><td class="wht_total">165.000₫</td><td class="wht_wallet_change wallet_column"></td></tr>
+</tbody></table>

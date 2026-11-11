@@ -1,5 +1,5 @@
 // Market history from steamcommunity.com/market/myhistory, with profit and
-// loss per item. Runs on steamcommunity.com like community.js.
+// loss per item. Loaded from steamcommunity.com like community.js.
 //
 // Each history row looks like this (class names from Steam's page):
 //   .market_listing_gainorloss   "+" bought, "-" sold, empty for a listing

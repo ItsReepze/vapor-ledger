@@ -1,0 +1,614 @@
+{
+  "extName": {
+    "message": "Vapor Ledger für Steam"
+  },
+  "extDescription": {
+    "message": "Ehrlicher Kontoauszug für dein Steam-Konto: Ausgaben, Spielzeit, Erstattungen, Inventar, Markt. Ohne Tracking, Daten bleiben lokal."
+  },
+  "langCode": {
+    "message": "de"
+  },
+  "appTitle": {
+    "message": "Vapor Ledger"
+  },
+  "footer": {
+    "message": "Vapor Ledger spricht nur mit Steam. Deine Daten bleiben in diesem Browser. Nicht mit Valve oder Steam verbunden."
+  },
+  "tab_overview": {
+    "message": "Übersicht"
+  },
+  "tab_refunds": {
+    "message": "Erstattungen"
+  },
+  "tab_worth": {
+    "message": "Hat es sich gelohnt?"
+  },
+  "tab_charts": {
+    "message": "Diagramme"
+  },
+  "tab_inventory": {
+    "message": "Inventar & Markt"
+  },
+  "tab_share": {
+    "message": "Rückblick & Export"
+  },
+  "refresh": {
+    "message": "Neu von Steam laden"
+  },
+  "dataFrom": {
+    "message": "Daten vom {0}"
+  },
+  "loadingSaved": {
+    "message": "Gespeicherte Daten werden geladen..."
+  },
+  "loadingStart": {
+    "message": "Steam wird gefragt, wer eingeloggt ist..."
+  },
+  "loadingGames": {
+    "message": "Deine Spiele werden geladen..."
+  },
+  "loadingHistory": {
+    "message": "Kaufhistorie wird geladen (Seite {0}, {1} Einträge)..."
+  },
+  "loadingStorePrices": {
+    "message": "Store-Preise werden geladen..."
+  },
+  "loadingStorePricesCount": {
+    "message": "Store-Preise werden geladen ({0} von {1} Spielen)..."
+  },
+  "loadingInventory": {
+    "message": "Inventar wird geladen: {0}..."
+  },
+  "loadingMarket": {
+    "message": "Markthistorie wird geladen ({0} von {1} Einträgen)..."
+  },
+  "loadingPrices": {
+    "message": "Marktpreise werden geladen: {0} von {1} (noch etwa {2} Min.)"
+  },
+  "somethingWrong": {
+    "message": "Etwas ist schiefgelaufen: {0}"
+  },
+  "rateLimited": {
+    "message": "Steam bremst gerade die Anfragen. Bitte in ein paar Minuten noch einmal versuchen."
+  },
+  "loginTitle": {
+    "message": "Bitte bei Steam einloggen"
+  },
+  "loginText": {
+    "message": "Vapor Ledger nutzt den Steam-Login dieses Browsers. Logge dich in einem anderen Tab im Steam-Store ein und komm dann hierher zurück."
+  },
+  "loginLink": {
+    "message": "Steam-Login öffnen"
+  },
+  "loginRetry": {
+    "message": "Ich bin eingeloggt, noch einmal versuchen"
+  },
+  "communityLogin": {
+    "message": "Du bist in diesem Browser nicht auf steamcommunity.com eingeloggt. Logge dich dort ein, um Inventar und Markt zu laden."
+  },
+  "communityOtherAccount": {
+    "message": "Auf Steam Community ist ein anderes Konto eingeloggt als im Steam-Store. Bitte auf beiden dasselbe Konto nutzen."
+  },
+  "search": {
+    "message": "Suchen"
+  },
+  "searchGames": {
+    "message": "Spiele suchen"
+  },
+  "searchItems": {
+    "message": "Gegenstände suchen"
+  },
+  "searchMarket": {
+    "message": "Markthistorie durchsuchen"
+  },
+  "tableRows": {
+    "message": "{0} Zeilen"
+  },
+  "free": {
+    "message": "kostenlos"
+  },
+  "stop": {
+    "message": "Anhalten"
+  },
+  "knownPricesOnly": {
+    "message": "nur bekannte Preise"
+  },
+  "tileSpent": {
+    "message": "Insgesamt ausgegeben"
+  },
+  "tileSpentHint": {
+    "message": "Käufe, Geschenke und In-Game, abzüglich Erstattungen"
+  },
+  "tileGames": {
+    "message": "Spiele"
+  },
+  "tilePlaytime": {
+    "message": "Spielzeit gesamt"
+  },
+  "tilePile": {
+    "message": "Pile of Shame"
+  },
+  "tilePileHint": {
+    "message": "unter {0} h, {1} nie gestartet"
+  },
+  "tilePilePaid": {
+    "message": "Bezahlt für den Pile"
+  },
+  "tilePerHour": {
+    "message": "Ausgaben pro Stunde"
+  },
+  "tilePerHourHint": {
+    "message": "Ausgaben gesamt / Spielzeit gesamt"
+  },
+  "tileStoreValue": {
+    "message": "Store-Wert heute"
+  },
+  "tileStoreValueHint": {
+    "message": "{0} Spiele noch im Verkauf, Pile: {1}"
+  },
+  "tileBalance": {
+    "message": "Was Steam dich wirklich gekostet hat"
+  },
+  "tileBalanceHint": {
+    "message": "Ausgaben minus Marktergebnis und Items (nach Gebühren)"
+  },
+  "tileOtherCurrencies": {
+    "message": "Andere Währungen"
+  },
+  "tileOtherCurrenciesHint": {
+    "message": "nicht umgerechnet und nicht in den Summen"
+  },
+  "spendingTitle": {
+    "message": "Ausgaben"
+  },
+  "perYearTitle": {
+    "message": "Ausgaben pro Jahr"
+  },
+  "noPurchases": {
+    "message": "Keine Käufe gefunden"
+  },
+  "typePurchase": {
+    "message": "Store-Käufe"
+  },
+  "typeGift": {
+    "message": "Geschenke für andere"
+  },
+  "typeIngame": {
+    "message": "In-Game-Käufe"
+  },
+  "typeRefund": {
+    "message": "Erstattungen"
+  },
+  "typeWallet": {
+    "message": "Guthaben aufgeladen (nicht gezählt)"
+  },
+  "typeMarket": {
+    "message": "Markt, Saldo im Guthaben (nicht gezählt)"
+  },
+  "typeOther": {
+    "message": "Andere Einträge (nicht gezählt)"
+  },
+  "gamesTitle": {
+    "message": "Spiele"
+  },
+  "colGame": {
+    "message": "Spiel"
+  },
+  "colGames": {
+    "message": "Spiele"
+  },
+  "colPlaytime": {
+    "message": "Spielzeit"
+  },
+  "colLastPlayed": {
+    "message": "Zuletzt gespielt"
+  },
+  "colBought": {
+    "message": "Gekauft"
+  },
+  "colPaid": {
+    "message": "Bezahlt"
+  },
+  "colPerHour": {
+    "message": "Pro Stunde"
+  },
+  "colStoreToday": {
+    "message": "Store heute"
+  },
+  "colMonth": {
+    "message": "Monat"
+  },
+  "colYear": {
+    "message": "Jahr"
+  },
+  "colSpent": {
+    "message": "Ausgegeben"
+  },
+  "colTotal": {
+    "message": "Summe"
+  },
+  "colItem": {
+    "message": "Gegenstand"
+  },
+  "colCount": {
+    "message": "Anzahl"
+  },
+  "colPrice": {
+    "message": "Preis"
+  },
+  "colMarketBought": {
+    "message": "Gekauft"
+  },
+  "colMarketSold": {
+    "message": "Verkauft"
+  },
+  "colNet": {
+    "message": "Saldo"
+  },
+  "filterAll": {
+    "message": "Alle Spiele"
+  },
+  "filterPile": {
+    "message": "Pile of Shame"
+  },
+  "filterPaid": {
+    "message": "Preis bekannt"
+  },
+  "notesTitle": {
+    "message": "Gut zu wissen"
+  },
+  "noteEntries": {
+    "message": "{0} Einträge aus deiner Kaufhistorie gelesen, {1} Spiele einem Preis zugeordnet."
+  },
+  "noteHistoryIncomplete": {
+    "message": "Steam hat die Kaufhistorie diesmal nicht vollständig geliefert, die Summen können zu niedrig sein. Neu von Steam laden versucht es noch einmal."
+  },
+  "noteCarts": {
+    "message": "{0} Käufe hatten mehrere Artikel in einem Warenkorb. Steam zeigt dafür nur die Summe, sie zählen also für die Gesamtsumme, aber nicht für einzelne Spiele."
+  },
+  "noteCurrencies": {
+    "message": "Alle Summen sind in {0}. Käufe in anderen Währungen werden getrennt gezeigt und nie dazugerechnet: {1}."
+  },
+  "noteUnknown": {
+    "message": "Nicht erkannt (als andere gezählt): {0}"
+  },
+  "noteNoPrice": {
+    "message": "Spiele aus Keys, Bundles oder Geschenken haben bei Steam keinen Preis und zeigen \"-\"."
+  },
+  "noteStoreValue": {
+    "message": "Der Store-Wert heute ist, was die noch verkauften Spiele jetzt im Store kosten würden, mit aktuellen Rabatten. Entfernte und kostenlose Spiele zählen nicht."
+  },
+  "noteNoStorePrices": {
+    "message": "Store-Preise konnten diesmal nicht geladen werden. Neu von Steam laden versucht es noch einmal."
+  },
+  "notePrivacy": {
+    "message": "Alle Daten bleiben in deinem Browser. Vapor Ledger spricht nur mit Steam."
+  },
+  "refundIntro": {
+    "message": "Steam erstattet ein Spiel in der Regel, wenn du innerhalb von {0} Tagen nach dem Kauf fragst und weniger als {1} Stunden gespielt hast. Diese Spiele aus deiner Kaufhistorie passen noch."
+  },
+  "refundSteamDecides": {
+    "message": "Steam entscheidet jede Anfrage selbst. Vapor Ledger beantragt nie eine Erstattung für dich."
+  },
+  "refundPolicyLink": {
+    "message": "Erstattungsregeln von Steam"
+  },
+  "refundOldData": {
+    "message": "Deine Daten sind {0} alt. Neu von Steam laden für die aktuelle Spielzeit."
+  },
+  "refundGamesTitle": {
+    "message": "Noch erstattbar"
+  },
+  "refundStill": {
+    "message": "noch erstattbar"
+  },
+  "refundNone": {
+    "message": "Kein Spiel aus den letzten 14 Tagen mit weniger als 2 Stunden Spielzeit."
+  },
+  "refundDaysLeft": {
+    "message": "Restzeit"
+  },
+  "refundDays": {
+    "message": "{0} Tage"
+  },
+  "refundMinutesLeft": {
+    "message": "Spielzeit übrig"
+  },
+  "refundMinutes": {
+    "message": "{0} Min."
+  },
+  "refundBought": {
+    "message": "Gekauft am"
+  },
+  "refundRequest": {
+    "message": "Erstattung bei Steam anfragen"
+  },
+  "refundOthersTitle": {
+    "message": "Weitere Artikel aus den letzten 14 Tagen"
+  },
+  "refundOthersText": {
+    "message": "DLC, Soundtracks und Artikel, die kein Spiel in deiner Bibliothek sind. Steam prüft die Regeln dafür selbst."
+  },
+  "refundNoteGifts": {
+    "message": "Geschenkte Spiele kann nur die Person erstatten lassen, die sie gekauft hat. Geschenke, die du für andere gekauft hast, stehen nicht in der Liste."
+  },
+  "refundNoteDlc": {
+    "message": "DLC lässt sich meist innerhalb von 14 Tagen erstatten, wenn das Hauptspiel seit dem Kauf weniger als 2 Stunden gespielt wurde, außer der DLC wurde verbraucht oder verändert."
+  },
+  "refundNoteIngame": {
+    "message": "In-Game-Käufe sind ausgelassen. Steam erstattet sie nur in manchen Spielen."
+  },
+  "refundNoteNothingAutomatic": {
+    "message": "Die Spielzeit ist die Gesamtzeit, die Steam meldet. Die Tage zählen ab dem Datum in deiner Kaufhistorie."
+  },
+  "worthIntro": {
+    "message": "Sortiert nach Kosten pro Stunde, für die {0} Spiele mit bekanntem Preis. Spiele mit weniger als einer Stunde zählen als eine Stunde."
+  },
+  "worthBest": {
+    "message": "Beste Käufe"
+  },
+  "worthWorst": {
+    "message": "Schlechteste Käufe"
+  },
+  "worthBestEmpty": {
+    "message": "Kein Spiel mit bekanntem Preis und mindestens einer Stunde Spielzeit."
+  },
+  "worthWorstEmpty": {
+    "message": "Kein Spiel mit bekanntem Preis."
+  },
+  "perHourValue": {
+    "message": "{0} / h"
+  },
+  "savingsTitle": {
+    "message": "Durch Rabatte gespart"
+  },
+  "savingsTotal": {
+    "message": "Gespart"
+  },
+  "savingsTotalHint": {
+    "message": "{0} Spiele unter dem Normalpreis gekauft"
+  },
+  "savingsRegular": {
+    "message": "Normalpreis"
+  },
+  "savingsCompared": {
+    "message": "{0} Spiele verglichen"
+  },
+  "savingsPaid": {
+    "message": "Du hast bezahlt"
+  },
+  "savingsRow": {
+    "message": "bezahlt {0}, Normalpreis heute {1}"
+  },
+  "savingsTodayNote": {
+    "message": "Die Kaufhistorie von Steam sagt nicht, was der Normalpreis am Kauftag war. Verglichen wird deshalb mit dem heutigen Normalpreis im Store, ohne heutigen Rabatt. Preise ändern sich über die Jahre, es ist also nur ein grober Anhaltspunkt."
+  },
+  "savingsOtherCurrency": {
+    "message": "Der Store zeigt Preise in {0}, deine Käufe sind in {1}. Vapor Ledger rechnet keine Währungen um, deshalb gibt es keinen Vergleich."
+  },
+  "chartShowTable": {
+    "message": "Als Tabelle zeigen"
+  },
+  "chartBarsDescription": {
+    "message": "Balkendiagramm mit {0} Balken. Fokussieren und mit den Pfeiltasten die Werte lesen."
+  },
+  "chartLineDescription": {
+    "message": "Liniendiagramm mit {0} Punkten. Fokussieren und mit den Pfeiltasten die Werte lesen."
+  },
+  "chartScatterDescription": {
+    "message": "Streudiagramm mit {0} Spielen. Fokussieren und mit den Pfeiltasten die Werte lesen."
+  },
+  "chartKeyboard": {
+    "message": "Tipp: Jedes Diagramm lässt sich mit Tab fokussieren und mit den Pfeiltasten lesen. \"Als Tabelle zeigen\" listet alle Werte."
+  },
+  "chartPeriod": {
+    "message": "Zeitraum"
+  },
+  "periodAll": {
+    "message": "Ganzes Konto"
+  },
+  "chartMonths": {
+    "message": "Ausgaben pro Monat"
+  },
+  "chartYears": {
+    "message": "Ausgaben pro Jahr"
+  },
+  "chartCumulative": {
+    "message": "Ausgaben über die Zeit, aufsummiert"
+  },
+  "chartPlaytime": {
+    "message": "Wie lange du deine Spiele gespielt hast"
+  },
+  "chartSpendPlay": {
+    "message": "Preis gegen Spielzeit"
+  },
+  "chartNoPrices": {
+    "message": "Noch kein Spiel mit bekanntem Preis."
+  },
+  "bucket0": {
+    "message": "nie"
+  },
+  "bucket_1": {
+    "message": "unter 1 h"
+  },
+  "bucket1_5": {
+    "message": "1 bis 5 h"
+  },
+  "bucket5_20": {
+    "message": "5 bis 20 h"
+  },
+  "bucket20_50": {
+    "message": "20 bis 50 h"
+  },
+  "bucket50_100": {
+    "message": "50 bis 100 h"
+  },
+  "bucket100_": {
+    "message": "über 100 h"
+  },
+  "recapTitle": {
+    "message": "Rückblick als Bild"
+  },
+  "recapIntro": {
+    "message": "Mach ein Bild deines Steam-Kontos zum Teilen. Es entsteht in diesem Browser und zeigt keine Steam-ID und keinen Namen. Spielnamen stehen nur drauf, wenn du das Häkchen setzt."
+  },
+  "recapPeriod": {
+    "message": "Zeitraum"
+  },
+  "recapWithGames": {
+    "message": "Meine 5 meistgespielten Spiele zeigen"
+  },
+  "recapSave": {
+    "message": "Bild speichern"
+  },
+  "recapPreview": {
+    "message": "Vorschau des Rückblick-Bilds"
+  },
+  "recapTitleAll": {
+    "message": "Mein Steam-Konto"
+  },
+  "recapTitleYear": {
+    "message": "Mein Steam-Jahr {0}"
+  },
+  "recapMadeOn": {
+    "message": "Erstellt am {0}"
+  },
+  "recapSpent": {
+    "message": "Ausgegeben"
+  },
+  "recapSpentHint": {
+    "message": "{0} Käufe, {1} Erstattungen"
+  },
+  "recapGamesAll": {
+    "message": "Spiele"
+  },
+  "recapGamesYear": {
+    "message": "Gekaufte Spiele"
+  },
+  "recapNeverPlayed": {
+    "message": "{0} nie gestartet"
+  },
+  "recapPlayedAll": {
+    "message": "Gespielt"
+  },
+  "recapPlayedYear": {
+    "message": "Bisher gespielt"
+  },
+  "recapPerHour": {
+    "message": "Pro gespielter Stunde"
+  },
+  "recapPerHourHint": {
+    "message": "Ausgaben / Spielzeit"
+  },
+  "recapBarsYears": {
+    "message": "Ausgaben pro Jahr"
+  },
+  "recapBarsMonths": {
+    "message": "Ausgaben pro Monat"
+  },
+  "recapTopGames": {
+    "message": "Am meisten gespielt"
+  },
+  "recapFooter": {
+    "message": "Erstellt mit Vapor Ledger, einer kostenlosen Browser-Erweiterung für Steam"
+  },
+  "exportTitle": {
+    "message": "Export"
+  },
+  "exportIntro": {
+    "message": "Speichere deine Daten als Dateien für eine Tabellenkalkulation oder eigene Werkzeuge. Die Dateien enthalten keine Steam-ID."
+  },
+  "exportPurchasesCsv": {
+    "message": "Kaufhistorie (CSV)"
+  },
+  "exportGamesCsv": {
+    "message": "Spiele (CSV)"
+  },
+  "exportJson": {
+    "message": "Alles (JSON)"
+  },
+  "deleteTitle": {
+    "message": "Gespeicherte Daten"
+  },
+  "deleteIntro": {
+    "message": "Vapor Ledger speichert die geladenen Daten in diesem Browser, damit die Seite schnell öffnet. Hier kannst du sie jederzeit löschen."
+  },
+  "deleteButton": {
+    "message": "Alle gespeicherten Daten löschen"
+  },
+  "deleteConfirm": {
+    "message": "Alles löschen, was Vapor Ledger in diesem Browser gespeichert hat?"
+  },
+  "inventoryIntro": {
+    "message": "Inventarwert und Markthistorie kommen von steamcommunity.com. Steam erlaubt nur etwa 20 Marktpreis-Anfragen pro Minute, die erste Prüfung eines großen Inventars dauert deshalb. Preise werden einen Tag gespeichert."
+  },
+  "inventoryLoad": {
+    "message": "Inventar und Markt laden"
+  },
+  "refreshInventory": {
+    "message": "Inventar und Markt neu laden"
+  },
+  "inventoryTitle": {
+    "message": "Inventar"
+  },
+  "marketTitle": {
+    "message": "Markthistorie"
+  },
+  "inventoryEmpty": {
+    "message": "Keine Gegenstände gefunden."
+  },
+  "marketEmpty": {
+    "message": "Keine Marktkäufe oder Verkäufe gefunden."
+  },
+  "tileInventoryValue": {
+    "message": "Inventarwert"
+  },
+  "tileInventoryValueHint": {
+    "message": "günstigstes Marktangebot"
+  },
+  "tileReceive": {
+    "message": "Du würdest bekommen"
+  },
+  "tileReceiveHint": {
+    "message": "nach Steam-Gebühren"
+  },
+  "tileItems": {
+    "message": "Gegenstände"
+  },
+  "tileItemsHint": {
+    "message": "{0} handelbar, {1} mit Preis"
+  },
+  "tileMarketBought": {
+    "message": "Am Markt gekauft"
+  },
+  "tileMarketSold": {
+    "message": "Am Markt verkauft"
+  },
+  "tileCount": {
+    "message": "{0} mal"
+  },
+  "tileMarketNet": {
+    "message": "Marktgewinn oder Verlust"
+  },
+  "tileMarketNetHint": {
+    "message": "verkauft minus gekauft, Unverkauftes zählt als Kosten"
+  },
+  "noteInventories": {
+    "message": "Gelesene Inventare: {0}."
+  },
+  "notePrices": {
+    "message": "Preise sind das günstigste aktuelle Angebot auf dem Steam-Markt und werden einen Tag gespeichert."
+  },
+  "noteReceive": {
+    "message": "\"Du würdest bekommen\" zieht die Steam- und Spielgebühren von jedem Preis ab."
+  },
+  "noteMarket": {
+    "message": "Marktgewinn oder Verlust nutzt die Preise genau so, wie deine Markthistorie sie zeigt."
+  },
+  "noteMarketIncomplete": {
+    "message": "Die Historie ist noch nicht vollständig, neu laden holt den Rest."
+  },
+  "noteNothingSold": {
+    "message": "Es wird nichts automatisch verkauft oder eingestellt. Alle Daten bleiben in deinem Browser."
+  }
+}

@@ -19,7 +19,17 @@ module.exports = [
     },
   },
   {
+    // The test page runs in the browser like the extension page.
+    files: ["test/harness.js"],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: "script",
+      globals: { ...globals.browser },
+    },
+  },
+  {
     files: ["test/**/*.js", "scripts/**/*.js", "eslint.config.js"],
+    ignores: ["test/harness.js"],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: "commonjs",

@@ -10,7 +10,7 @@ const zlib = require("node:zlib");
 const root = path.join(__dirname, "..");
 
 // Everything the browser loads, plus the license.
-const INCLUDE = ["manifest.json", "LICENSE", "src", "icons"];
+const INCLUDE = ["manifest.json", "LICENSE", "_locales", "src", "icons"];
 const EXCLUDE = [/\.svg$/, /(^|\/)\./];
 
 function listFiles() {

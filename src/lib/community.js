@@ -1,6 +1,6 @@
-// Inventory and market prices from steamcommunity.com. These functions run
-// on steamcommunity.com pages, so every request is a normal same-site
-// request with the user's own login, exactly like the inventory page.
+// Inventory and market prices from steamcommunity.com. The extension page
+// loads them with the user's own Steam Community login, the same data the
+// inventory and market pages load.
 //
 // Steam limits these endpoints hard. All requests go one after another with
 // a pause, and a "429 Too Many Requests" stops loading instead of retrying.
@@ -63,6 +63,16 @@ VL.getCommunitySession = function (doc) {
   }
   if (!steamid) return null;
   return { steamid, currency };
+};
+
+// Loads the user's own inventory page once to learn who is logged in on
+// Steam Community and which wallet currency the market uses. Returns
+// { steamid, currency } or null if nobody is logged in there.
+VL.openCommunity = async function () {
+  const response = await communityGet(COMMUNITY + "/my/inventory/");
+  if (!response.ok) return null;
+  const doc = new DOMParser().parseFromString(await response.text(), "text/html");
+  return VL.getCommunitySession(doc);
 };
 
 // Turns one inventory page into a list of item stacks:
