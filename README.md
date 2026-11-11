@@ -26,7 +26,7 @@ button or the "Vapor Ledger" link in Steam's header.
 - **Worth it?**: best and worst purchases by cost per hour, and what
   discounts saved compared with today's regular price
 - **Charts**: spending per month and year, spending added up over time,
-  playtime ranges, price against playtime. Plain SVG, light and dark,
+  playtime ranges, price against playtime. Plain SVG in Steam's colors,
   readable with the keyboard and as a table
 - **Inventory and market**: inventory value for Steam items,
   Counter-Strike 2, Team Fortress 2, Dota 2, Rust and PUBG, what you would
@@ -39,6 +39,22 @@ button or the "Vapor Ledger" link in Steam's header.
 - Purchase history in every Steam store language. Different currencies are
   shown apart and never added up
 - Local cache, so the page opens instantly next time
+- In Steam's own look: same colors, fonts and buttons as Steam
+
+### Better Steam pages
+
+Vapor Ledger also makes some of Steam's own pages easier to use. It only
+changes how they look and work in your browser, saving still goes through
+Steam's own buttons and forms. Every part can be switched off on the
+"Settings" tab, and if Steam changes a page, the original page stays.
+
+- **Profile edit**: Steam's Save bar stays in view while you scroll and
+  shows when there are unsaved changes, Ctrl+S saves with Steam's own
+  button, a warning before leaving with unsaved changes, character
+  counters, a preview of your custom URL
+- **Purchase history**: search, filter by type, and "Load all", which
+  clicks Steam's own "Load more" button for you, one page at a time
+- **Licenses**: search and filter by year
 
 Nothing is ever bought, sold, listed, traded or refunded automatically.
 
@@ -113,7 +129,11 @@ The extension has no build step. Edit the files and reload the extension.
 - `src/lib/` data loading, parsing and statistics
 - `src/app/` the extension page: tabs, tables, charts, recap image
 - `src/content/link.js` the "Vapor Ledger" link in Steam's header, the only
-  script that runs on Steam's pages
+  script that runs on every Steam page
+- `src/content/profile-edit.js`, `history-tools.js`, `licenses-tools.js` the
+  improvements of Steam's own pages, only loaded on those pages, with
+  `common.js` and `steam-tools.css`
+- `src/lib/settings.js` which improvements are switched on
 - `src/background.js` opens the page from the toolbar button and the link
 - `_locales/` English and German texts
 - `test/*.test.js` tests for parsers, statistics, pages, manifest and package

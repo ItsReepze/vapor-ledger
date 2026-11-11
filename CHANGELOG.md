@@ -3,15 +3,14 @@
 ## 0.3.0 (2026-11-11)
 
 - Own extension page instead of an overlay on Steam. It opens from the
-  toolbar button or the "Vapor Ledger" link in Steam's header, the only
-  script left on Steam's pages
+  toolbar button or the "Vapor Ledger" link in Steam's header
 - Refund watch: games bought in the last 14 days with less than 2 hours
   played, with days and minutes left and a link to Steam's help page
 - Worth it: best and worst purchases by cost per hour, savings from
   discounts compared with today's regular price
 - Charts without a library: spending per month and year, added up over
-  time, playtime ranges, price against playtime. Light and dark mode,
-  keyboard and table access, tooltips
+  time, playtime ranges, price against playtime. Keyboard and table
+  access, tooltips
 - Recap image for the whole account or one year, game names optional
 - Export as CSV (purchases, games) and JSON
 - Interface in English and German
@@ -19,6 +18,13 @@
   browser's month names, types read from the row structure first
 - Different currencies are kept apart and never added up
 - Delete all saved data from the page
+- The page uses Steam's own look: colors, fonts, buttons and spacing.
+  Steam has no light mode, so the page has none either
+- Better Steam pages, each part can be switched off on the new Settings
+  tab: profile edit (Save bar stays in view, Ctrl+S, warning before
+  leaving with unsaved changes, character counters, custom URL preview),
+  search, type filter and "Load all" in the purchase history, search and
+  year filter in the licenses. Steam's own buttons and forms do the saving
 - New host permission for steamcommunity.com, because inventory and
   market now load from the extension page. The toolbar popup is gone
 - Tests with made up Steam pages in many languages and currencies

@@ -61,7 +61,7 @@ Worth it?
 
 Charts
 - Spending per month and year, spending over time, playtime ranges, price against playtime
-- Light and dark mode, readable with the keyboard and as a table
+- In Steam's own look, readable with the keyboard and as a table
 
 Inventory and market
 - Inventory value for Steam items, Counter-Strike 2, Team Fortress 2, Dota 2, Rust and PUBG
@@ -117,7 +117,7 @@ Hat es sich gelohnt?
 
 Diagramme
 - Ausgaben pro Monat und Jahr, Ausgaben über die Zeit, Spielzeit-Verteilung, Preis gegen Spielzeit
-- Hell und dunkel, mit Tastatur und als Tabelle lesbar
+- Im Look von Steam, mit Tastatur und als Tabelle lesbar
 
 Inventar und Markt
 - Inventarwert für Steam-Items, Counter-Strike 2, Team Fortress 2, Dota 2, Rust und PUBG

@@ -35,6 +35,14 @@ inventory (steamcommunity.com/inventory), market prices
 same content script as on the store adds the "Vapor Ledger" link to the
 header.
 
+**Content scripts on single Steam pages**
+On the profile edit pages (steamcommunity.com/id/*/edit,
+/profiles/*/edit), the purchase history and the licenses page of the store,
+content scripts make Steam's own page easier to use: search fields, filters,
+a Save bar that stays in view, character counters. They load nothing, send
+nothing and only click Steam's own buttons when the user asks for it. Each
+one can be switched off in the extension's settings.
+
 **Remote code**
 No. All JavaScript is included in the package. No eval, no remote scripts.
 

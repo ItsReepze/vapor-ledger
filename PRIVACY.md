@@ -63,8 +63,12 @@ to Steam's own help page. Vapor Ledger never sends a refund request.
 
 - It never buys, sells, lists, trades or refunds anything on your behalf.
 - It never changes your Steam account or settings.
-- It never reads pages other than Steam's. The script on Steam's pages only
-  adds the "Vapor Ledger" link to the header.
+- It never reads pages other than Steam's. On Steam's pages it adds the
+  "Vapor Ledger" link to the header and, on the profile edit, purchase
+  history and licenses pages, search fields and other helpers. These only
+  work inside the page you have open: they load nothing, send nothing and
+  save through Steam's own buttons only when you click them (or press
+  Ctrl+S on the profile edit page). Each of them can be switched off.
 - It never loads code from the internet. All code is part of the extension
   package and is public on GitHub.
 
@@ -79,7 +83,7 @@ browser's extension settings.
 
 | Permission | Why |
 |---|---|
-| `storage` | to keep the loaded data in your browser, so the page opens instantly |
+| `storage` | to keep the loaded data and your settings in your browser, so the page opens instantly |
 | store.steampowered.com | to read your purchase history and who is logged in, and to add the "Vapor Ledger" link to the header |
 | api.steampowered.com | to read your games, playtime and current store prices from Steam's official API |
 | steamcommunity.com | to read your inventory, market prices and market history, and to add the "Vapor Ledger" link to the header |
